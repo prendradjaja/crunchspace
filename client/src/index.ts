@@ -44,7 +44,7 @@ const MAX_SCORES = 10;
 
 function showHighScores(): Promise<HighScore[]> {
   const scoreboard = document.querySelector("#scoreboard")!;
-  scoreboard.innerHTML = "Loading high scores...";
+  scoreboard.innerHTML = "(Loading high scores...)";
   return getHighScores().then((scores) => {
     const paddedScores =
       scores.length === MAX_SCORES

@@ -29,7 +29,7 @@ function initFields(this: MainScene) {
     cave: this.physics.add.group(),
     walls: this.physics.add.group(),
     cursors: this.input.keyboard.createCursorKeys(),
-    pointer: this.game.input.mousePointer,
+    pointer: this.game.input.activePointer,
     caveShapeGenerator: makeCaveShapeGenerator(),
     started: false,
     stopped: false,
@@ -302,7 +302,8 @@ export class MainScene extends Phaser.Scene {
 
   update() {
     const $ = this.fields;
-    if ($.cursors.space.isDown || $.pointer.isDown) {
+    const globals = window as any;
+    if ($.cursors.space.isDown || $.pointer.isDown || globals.isTouching) {
       this.start();
       // It feels kinda sudden to instantly stop accelerating at MAX_CLIMB_SPEED. Does the original game smooth that out?
       $.player.setVelocityY(
@@ -393,3 +394,13 @@ function highScoreText() {
 //     $.currentColor = color;
 //   }
 // }
+
+document.body.addEventListener("touchstart", function (e) {
+  const globals = window as any;
+  globals.isTouching = true;
+});
+
+document.body.addEventListener("touchend", function (e) {
+  const globals = window as any;
+  globals.isTouching = false;
+});
