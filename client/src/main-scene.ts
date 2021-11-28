@@ -20,6 +20,9 @@ function initFields(this: MainScene) {
   };
 }
 
+let HIDE_PLAYER = false;
+// HIDE_PLAYER = true;
+
 type Fields = ReturnType<typeof initFields>;
 
 export class MainScene extends Phaser.Scene {
@@ -41,8 +44,13 @@ export class MainScene extends Phaser.Scene {
   create() {
     this.fields = initFields.bind(this)();
     const $ = this.fields;
-    $.player.body.gravity.y = GRAVITY;
-    $.player.setCollideWorldBounds(true);
+
+    if (!HIDE_PLAYER) {
+      $.player.setGravityY(GRAVITY);
+      $.player.setCollideWorldBounds(true);
+    } else {
+      $.player.setY(-5000);
+    }
 
     var particles = this.add.particles("dot");
 
