@@ -338,9 +338,24 @@ export class MainScene extends Phaser.Scene {
       this.appendWall();
     }
 
-    if (STARS_ENABLED && $.started && !$.stopped && Math.random() < 0.2) {
+    if (
+      STARS_ENABLED &&
+      $.started &&
+      !$.stopped &&
+      Math.random() < this.starProbability($.score)
+    ) {
       const emitter = randomChoice($.starEmitters);
       emitter.emitParticle(1, WIDTH, randomInt(0, HEIGHT));
+    }
+  }
+
+  starProbability(score: number) {
+    if (score < 250) {
+      return 0.03;
+    } else if (score < 500) {
+      return 0.1;
+    } else {
+      return 0.2;
     }
   }
 
