@@ -76,6 +76,7 @@ function initFields(this: MainScene) {
       }),
     ],
     startTimeMillis: undefined as number | undefined,
+    welcomeScreen: [] as Phaser.GameObjects.Text[],
     scoreText: this.add
       .text(10, 5, highScoreText(), {
         fontSize: "90px",
@@ -151,6 +152,38 @@ export class MainScene extends Phaser.Scene {
 
     this.fields = initFields.bind(this)();
     const $ = this.fields;
+
+    $.welcomeScreen.push(
+      this.add
+        .text(WIDTH * 0.6, HEIGHT * 0.5, "CLICK TO START", {
+          color: "white",
+          fontSize: "100px",
+        })
+        .setOrigin(0.5, 0.5),
+      this.add
+        .text(WIDTH * 0.8, HEIGHT * 0.65, "CLICK AND HOLD TO GO UP", {
+          color: "#cccccc",
+          fontSize: "55px",
+        })
+        .setOrigin(1, 0.5),
+      this.add
+        .text(WIDTH * 0.8, HEIGHT * 0.69, "RELEASE TO GO DOWN", {
+          color: "#cccccc",
+          fontSize: "55px",
+        })
+        .setOrigin(1, 0.5),
+      this.add
+        .text(
+          WIDTH * 0.8,
+          HEIGHT * 0.76,
+          "SPACEBAR OR TAP (MOBILE) WORKS TOO",
+          {
+            color: "#cccccc",
+            fontSize: "55px",
+          }
+        )
+        .setOrigin(1, 0.5)
+    );
 
     if (!HIDE_PLAYER) {
       $.player.setGravityY(GRAVITY);
@@ -305,6 +338,8 @@ export class MainScene extends Phaser.Scene {
       $.startTimeMillis = new Date().valueOf();
       this.physics.resume();
       $.emitter.startFollow($.player, -120);
+
+      $.welcomeScreen.forEach((text) => text.destroy());
     }
   }
 
