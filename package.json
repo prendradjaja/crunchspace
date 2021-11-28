@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "start": "cd server && npm run start",
     "format": "prettier --write .",
     "prepare-husky": "husky install",
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -17,5 +18,8 @@
   },
   "lint-staged": {
     "**/*": "prettier --write --ignore-unknown"
+  },
+    "engines": {
+    "node": "12.x"
   }
 }
