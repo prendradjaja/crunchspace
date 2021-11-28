@@ -24,10 +24,13 @@ function initFields(this: MainScene) {
 }
 
 let HIDE_PLAYER = false;
-HIDE_PLAYER = true;
+// HIDE_PLAYER = true;
 
 let HIDE_CAVE = false;
-HIDE_CAVE = true;
+// HIDE_CAVE = true;
+
+let ORIGINAL_ASSETS = true;
+ORIGINAL_ASSETS = false;
 
 type Fields = ReturnType<typeof initFields>;
 
@@ -41,7 +44,10 @@ export class MainScene extends Phaser.Scene {
   }
 
   preload() {
-    this.load.image("player", "assets/player.png");
+    this.load.image(
+      "player",
+      ORIGINAL_ASSETS ? "assets/player.png" : "assets/ship-with-dog.png"
+    );
     this.load.image("wall", "assets/wall.png");
     this.load.image("tall-wall", "assets/tall-wall.png");
     this.load.image("dot", "assets/dot.png");
@@ -59,6 +65,9 @@ export class MainScene extends Phaser.Scene {
     } else {
       $.player.setY(-5000);
     }
+    if (!ORIGINAL_ASSETS) {
+      $.player.setScale(4);
+    }
 
     var particles = this.add.particles("dot");
 
@@ -69,7 +78,7 @@ export class MainScene extends Phaser.Scene {
       lifespan: 500,
       frequency: 50,
     });
-    emitter.startFollow($.player);
+    emitter.startFollow($.player, -120);
 
     if (!HIDE_CAVE) {
       for (let i = 0; i < 50; i++) {
@@ -83,17 +92,17 @@ export class MainScene extends Phaser.Scene {
       this.physics.add.overlap($.player, $.cave, this.onHit.bind(this));
     }
 
-    let i = 0;
-    for (let item of $.caveShapeGenerator) {
-      const x = 0.0 * WIDTH + i * WALL_WIDTH;
-      const { equator, ceiling, floor } = item;
-      this.add.image(x, equator, "dot");
-      this.add.image(x, floor, "dot").setTint(0xff0000);
-      this.add.image(x, ceiling, "dot").setTint(0x0000ff);
-      i++;
-    }
+    // let i = 0;
+    // for (let item of $.caveShapeGenerator) {
+    //   const x = 0.0 * WIDTH + i * WALL_WIDTH;
+    //   const { equator, ceiling, floor } = item;
+    //   this.add.image(x, equator, "dot");
+    //   this.add.image(x, floor, "dot").setTint(0xff0000);
+    //   this.add.image(x, ceiling, "dot").setTint(0x0000ff);
+    //   i++;
+    // }
 
-    this.physics.pause();
+    // this.physics.pause();
   }
 
   update() {
