@@ -14,7 +14,7 @@ import {
 function initFields(this: MainScene) {
   return {
     player: this.physics.add.sprite(WIDTH * 0.2, HEIGHT * 0.5, "player"),
-    wall: this.physics.add.sprite(WIDTH * 0.9, HEIGHT * 0.5, "wall"),
+    cave: this.physics.add.group(),
     cursors: this.input.keyboard.createCursorKeys(),
     pointer: this.game.input.mousePointer,
   };
@@ -43,8 +43,6 @@ export class MainScene extends Phaser.Scene {
     const $ = this.fields;
     $.player.body.gravity.y = GRAVITY;
     $.player.setCollideWorldBounds(true);
-    $.wall.setVelocityX(-HORIZONTAL_SPEED);
-    this.physics.add.overlap($.player, $.wall, this.onHit.bind(this));
 
     var particles = this.add.particles("dot");
 
@@ -56,6 +54,17 @@ export class MainScene extends Phaser.Scene {
       frequency: 50,
     });
     emitter.startFollow($.player);
+
+    for (let i = 0; i < 50; i++) {
+      const WALL_WIDTH = 120;
+      const WAVE_SIZE = 500;
+      const x = 0.5 * WIDTH + i * WALL_WIDTH;
+      const y = 500 * Math.cos((i * Math.PI * 2) / 40);
+      $.cave.create(x, -800 + y + 0.5 * HEIGHT, "tall-wall");
+      $.cave.create(x, 800 + y + 0.5 * HEIGHT, "tall-wall");
+    }
+    $.cave.setVelocityX(-HORIZONTAL_SPEED);
+    this.physics.add.overlap($.player, $.cave, this.onHit.bind(this));
   }
 
   update() {
@@ -67,16 +76,12 @@ export class MainScene extends Phaser.Scene {
       );
     }
     const offset = 300;
-    if ($.wall.body.position.x < -offset) {
-      $.wall.setX(WIDTH + offset);
-    }
   }
 
   onHit(
     player: PT.Physics.Arcade.GameObjectWithBody,
     wall: PT.Physics.Arcade.GameObjectWithBody
   ) {
-    // this.physics.pause();
     this.scene.restart();
   }
 }
