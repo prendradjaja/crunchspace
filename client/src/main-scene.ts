@@ -8,7 +8,9 @@ import {
   MAX_CLIMB_SPEED,
   HORIZONTAL_SPEED,
   WALL_WIDTH,
+  ORIGINAL_ASSETS,
 } from "./constants";
+import { take } from "./util";
 import { makeCaveShapeGenerator } from "./cave-shape-generator";
 
 // I wish I could infer type after declaration, but I guess I can't :(
@@ -27,10 +29,7 @@ let HIDE_PLAYER = false;
 // HIDE_PLAYER = true;
 
 let HIDE_CAVE = false;
-// HIDE_CAVE = true;
-
-let ORIGINAL_ASSETS = true;
-ORIGINAL_ASSETS = false;
+HIDE_CAVE = true;
 
 type Fields = ReturnType<typeof initFields>;
 
@@ -41,6 +40,7 @@ export class MainScene extends Phaser.Scene {
 
   constructor() {
     super({ key: "MainScene" });
+    console.log("ctor");
   }
 
   preload() {
@@ -54,7 +54,15 @@ export class MainScene extends Phaser.Scene {
   }
 
   create() {
+    const globals = window as any;
+    globals.scene = this;
+    globals.camera = this.cameras.cameras[0];
+
+    globals.camera.setZoom(0.5);
+
     // this.add.image(WIDTH * 0.2, HEIGHT * 0.8, "wall"),
+
+    this.add.rectangle(WIDTH / 2, HEIGHT / 2, WIDTH, HEIGHT, 0x800080);
 
     this.fields = initFields.bind(this)();
     const $ = this.fields;
@@ -67,6 +75,8 @@ export class MainScene extends Phaser.Scene {
     }
     if (!ORIGINAL_ASSETS) {
       $.player.setScale(4);
+      const hitboxScale = 0.8;
+      $.player.body.setSize(55 * hitboxScale, 37 * hitboxScale);
     }
 
     var particles = this.add.particles("dot");
@@ -80,29 +90,84 @@ export class MainScene extends Phaser.Scene {
     });
     emitter.startFollow($.player, -120);
 
-    if (!HIDE_CAVE) {
-      for (let i = 0; i < 50; i++) {
-        const WAVE_SIZE = 500;
-        const x = 0.0 * WIDTH + i * WALL_WIDTH;
-        const y = 500 * Math.cos((i * Math.PI * 2) / 40);
-        $.cave.create(x, -800 + y + 0.5 * HEIGHT, "tall-wall");
-        $.cave.create(x, 800 + y + 0.5 * HEIGHT, "tall-wall");
-      }
-      $.cave.setVelocityX(-HORIZONTAL_SPEED);
-      this.physics.add.overlap($.player, $.cave, this.onHit.bind(this));
+    this.addFirstCaveBlockPair();
+    for (let i = 0; i < 16; i++) {
+      this.appendCaveBlockPair();
     }
+    this.physics.add.overlap($.player, $.cave, this.onHit.bind(this));
 
     // let i = 0;
     // for (let item of $.caveShapeGenerator) {
     //   const x = 0.0 * WIDTH + i * WALL_WIDTH;
-    //   const { equator, ceiling, floor } = item;
-    //   this.add.image(x, equator, "dot");
-    //   this.add.image(x, floor, "dot").setTint(0xff0000);
-    //   this.add.image(x, ceiling, "dot").setTint(0x0000ff);
+    //   // const { equator, ceiling, floor } = item;
+    //   const { equator } = item;
+    //   $.cave.create(x, equator, "dot");
+    //   // $.cave.create(x, floor, "dot").setTint(0xff0000);
+    //   // $.cave.create(x, ceiling, "dot").setTint(0x0000ff);
     //   i++;
     // }
 
+    // this.add.image(0, 0, 'wall').setOrigin(0, 0);
+    // this.add.image(WIDTH, HEIGHT, 'wall').setOrigin(1, 1);
+
+    // $.cave.setVelocityX(-HORIZONTAL_SPEED);
+
     // this.physics.pause();
+  }
+
+  maybeRemoveCaveBlockPair() {
+    const $ = this.fields;
+    if ($.cave.getFirst(true).x < 0) {
+      for (let i = 0; i < 2; i++) {
+        const child = $.cave.getFirst(true);
+        // $.cave.remove(child);
+        $.cave.remove(child, true, true);
+      }
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  addFirstCaveBlockPair() {
+    const $ = this.fields;
+    const x = 0;
+
+    const equator = HEIGHT / 2;
+    const ceilingY = equator - 800;
+    const floorY = equator + 1600;
+    $.cave
+      .create(x, ceilingY, "tall-wall")
+      .setOrigin(1, 0.5)
+      .setVelocityX(-HORIZONTAL_SPEED);
+
+    $.cave
+      .create(x, floorY, "tall-wall")
+      .setOrigin(1, 0.5)
+      .setVelocityX(-HORIZONTAL_SPEED);
+  }
+
+  appendCaveBlockPair() {
+    const $ = this.fields;
+    const lastWall = $.cave.getLast(true);
+    const x = lastWall.x + WALL_WIDTH; //
+
+    const item = $.caveShapeGenerator.next();
+    if (item.done) {
+      return;
+    }
+    const { equator } = item.value;
+    const ceilingY = equator - 800;
+    const floorY = equator + 2000;
+    $.cave
+      .create(x, ceilingY, "tall-wall")
+      .setOrigin(1, 0.5)
+      .setVelocityX(-HORIZONTAL_SPEED);
+
+    $.cave
+      .create(x, floorY, "tall-wall")
+      .setOrigin(1, 0.5)
+      .setVelocityX(-HORIZONTAL_SPEED);
   }
 
   update() {
@@ -114,7 +179,17 @@ export class MainScene extends Phaser.Scene {
       );
     }
     const offset = 300;
+    const removed = this.maybeRemoveCaveBlockPair();
+    if (removed) {
+      this.appendCaveBlockPair();
+    }
+    // this.physics.pause();
   }
+
+  // render() {
+  //   const $ = this.fields;
+  //   this.debug.body($.player);
+  // }
 
   onHit(
     player: PT.Physics.Arcade.GameObjectWithBody,

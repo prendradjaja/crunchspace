@@ -4,6 +4,9 @@ export const LIFT = 70;
 export const MAX_CLIMB_SPEED = 700;
 export const HORIZONTAL_SPEED = 1000;
 
+export let ORIGINAL_ASSETS = true;
+ORIGINAL_ASSETS = false;
+
 // Careful! Modifying below this line may break stuff -------------------------
 export const WIDTH = 1918;
 export const HEIGHT = 1438;

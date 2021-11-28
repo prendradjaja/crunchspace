@@ -1,24 +1,13 @@
-import { zip } from "./util";
+import { take } from "./util";
 
-describe("zip()", () => {
-  it("zips and stops at the first 'done'", () => {
-    function* abc() {
-      yield "a";
-      yield "b";
-      yield "c";
-    }
-    function* naturals() {
-      let i = 1;
-      while (true) {
-        yield i;
-        i++;
-      }
-    }
-    const result = Array.from(zip(abc(), naturals()));
-    expect(result).toEqual([
-      ["a", 1],
-      ["b", 2],
-      ["c", 3],
-    ]);
+describe("take()", () => {
+  it("takes first N elements", () => {
+    const result = Array.from(take(3, [1, 2, 3, 4, 5]));
+    expect(result).toEqual([1, 2, 3]);
+  });
+
+  it("stops early if not enough elements", () => {
+    const result = Array.from(take(3, [1, 2]));
+    expect(result).toEqual([1, 2]);
   });
 });
