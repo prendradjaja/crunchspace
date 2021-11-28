@@ -1,9 +1,13 @@
 import express from "express";
+import { Pool } from "pg";
 
 import { hello } from "./hello";
 
-// console.log(hello());
-// console.log("db url:", process.env.DATABASE_URL);
+const DATABASE_URL = process.env.DATABASE_URL;
+if (!DATABASE_URL) {
+  console.error("FATAL: At least one required environment variable is missing");
+  process.exit(1);
+}
 
 // Optional variables
 const PORT = process.env.PORT || 8000;
@@ -12,8 +16,33 @@ const app = express();
 app.use(express.json());
 app.use(express.static("../client/dist/"));
 
+const pgPool = new Pool({
+  connectionString: DATABASE_URL,
+  // TODO Use SSL in production?
+});
+
 app.get("/api/hello", (req: express.Request, res: express.Response) => {
   res.send({ message: "hello, world" });
+});
+
+app.post("/api/high-score", async (req, res) => {
+  console.log("Received high score");
+  const { player, score } = req.body;
+  try {
+    // await fakeNetworkDelay();
+    await pgPool.query(
+      `
+        INSERT INTO high_score(player, score, created_at)
+        VALUES ($1, $2, current_timestamp)
+      `,
+      [player, score]
+    );
+    console.log("Successfully saved high score");
+    res.send("{}");
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Error " + err);
+  }
 });
 
 app.listen(PORT, () =>

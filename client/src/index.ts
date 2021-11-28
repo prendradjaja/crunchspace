@@ -2,6 +2,8 @@ import Phaser, { Types as PT } from "phaser";
 
 import { MainScene } from "./main-scene";
 import { WIDTH, HEIGHT, ORIGINAL_ASSETS } from "./constants";
+import { createHighScore } from "./api";
+import { randomInt } from "./util";
 
 const config: PT.Core.GameConfig = {
   type: Phaser.AUTO,
@@ -20,3 +22,13 @@ const config: PT.Core.GameConfig = {
 };
 
 const game = new Phaser.Game(config);
+
+const globals = window as any;
+
+function tryApi() {
+  createHighScore({
+    player: "example-score",
+    score: randomInt(1, 100),
+  });
+}
+globals.tryApi = tryApi;
