@@ -26,7 +26,7 @@ function initFields(this: MainScene) {
 }
 
 let HIDE_PLAYER = false;
-// HIDE_PLAYER = true;
+HIDE_PLAYER = true;
 
 let HIDE_CAVE = false;
 HIDE_CAVE = true;
@@ -143,12 +143,14 @@ export class MainScene extends Phaser.Scene {
     const { ceiling, floor } = item.value;
     $.cave
       .create(x, ceiling, "tall-wall")
-      .setOrigin(1, 0.5)
+      .setOrigin(1, 1)
+      .setAlpha(0.5)
       .setVelocityX(-HORIZONTAL_SPEED);
 
     $.cave
       .create(x, floor, "tall-wall")
-      .setOrigin(1, 0.5)
+      .setOrigin(1, 0)
+      .setAlpha(0.5)
       .setVelocityX(-HORIZONTAL_SPEED);
   }
 

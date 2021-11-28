@@ -13,20 +13,20 @@ export const HEIGHT = 1438;
 export const WALL_WIDTH = 120;
 
 // Measured (at scale 0.353) as 416 to 303
-export const caveHeight = {
+export const caveHeightRange = {
   // in pixels
   EASY: 1178,
   HARD: 858,
 };
 
 // Measured (at scale 0.353) as 20 to 130
-export const maxDeltaY = {
+export const maxDeltaYRange = {
   // in pixels
   EASY: 57,
   HARD: 368,
 };
 
-export const minDeltaX = {
+export const minDeltaXRange = {
   // in blocks
   EASY: 8,
   HARD: 1,

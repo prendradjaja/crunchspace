@@ -1,9 +1,10 @@
 import {
   HEIGHT,
-  caveHeight,
-  maxDeltaY,
-  minDeltaX,
+  caveHeightRange,
+  maxDeltaYRange,
+  minDeltaXRange,
   MAX_DIFFICULTY_DISTANCE,
+  MARGIN,
 } from "./constants";
 import { zip } from "./zip";
 import { randomInt } from "./util";
@@ -14,12 +15,15 @@ new LinearScale([1, 2], [3, 4]);
 export function* makeCaveShapeGenerator() {
   while (true) {
     let segmentLength = randomInt(3, 10);
+    const caveHeight = caveHeightRange.HARD;
+    const wiggle = HEIGHT - caveHeight - 2 * MARGIN;
     for (let i = 0; i < segmentLength; i++) {
-      const equator = HEIGHT * 0.5 - i * 100;
-      yield {
-        ceiling: equator - 800,
-        floor: equator + 800,
-      };
+      let floor = HEIGHT - MARGIN;
+      if (i % 2 === 0) {
+        floor -= wiggle;
+      }
+      const ceiling = floor - caveHeight;
+      yield { ceiling, floor };
     }
   }
 }
