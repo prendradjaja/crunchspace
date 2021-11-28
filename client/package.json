@@ -5,7 +5,8 @@
   "scripts": {
     "test": "jest",
     "serve": "webpack-cli serve --mode development",
-    "build": "webpack"
+    "build": "webpack && mkdir -p dist/assets && cp -r public/assets/*.png dist/assets/",
+    "clean": "rm -rf dist"
   },
   "keywords": [
     "TypeScript",
