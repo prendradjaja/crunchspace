@@ -24,6 +24,14 @@ function initFields(this: MainScene) {
     cursors: this.input.keyboard.createCursorKeys(),
     pointer: this.game.input.mousePointer,
     caveShapeGenerator: makeCaveShapeGenerator(),
+    started: false,
+    emitter: this.add.particles("dot").createEmitter({
+      speedX: -HORIZONTAL_SPEED,
+      scale: { start: 1, end: 0 },
+      blendMode: "ADD",
+      lifespan: 500,
+      frequency: 50,
+    }),
   };
 }
 
@@ -77,24 +85,13 @@ export class MainScene extends Phaser.Scene {
       $.player.body.setSize(55 * hitboxScale, 37 * hitboxScale);
     }
 
-    var particles = this.add.particles("dot");
-
-    var emitter = particles.createEmitter({
-      speedX: -HORIZONTAL_SPEED,
-      scale: { start: 1, end: 0 },
-      blendMode: "ADD",
-      lifespan: 500,
-      frequency: 50,
-    });
-    emitter.startFollow($.player, -120);
-
     this.addFirstCaveBlockPair();
     for (let i = 0; i < BLOCK_LIMIT; i++) {
       this.appendCaveBlockPair();
     }
     this.physics.add.overlap($.player, $.cave, this.onHit.bind(this));
 
-    // this.physics.pause();
+    this.physics.pause();
   }
 
   maybeRemoveCaveBlockPair() {
@@ -154,6 +151,11 @@ export class MainScene extends Phaser.Scene {
   update() {
     const $ = this.fields;
     if ($.cursors.space.isDown || $.pointer.isDown) {
+      if (!$.started) {
+        $.started = true;
+        this.physics.resume();
+        $.emitter.startFollow($.player, -120);
+      }
       // It feels kinda sudden to instantly stop accelerating at MAX_CLIMB_SPEED. Does the original game smooth that out?
       $.player.setVelocityY(
         Math.max($.player.body.velocity.y - LIFT, -MAX_CLIMB_SPEED)
