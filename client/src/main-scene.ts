@@ -137,7 +137,7 @@ export class MainScene extends Phaser.Scene {
     const globals = window as any;
     globals.scene = this;
     globals.camera = this.cameras.cameras[0];
-    // globals.camera.setZoom(0.5);
+    globals.camera.setZoom(0.2);
 
     // this.add.image(WIDTH * 0.2, HEIGHT * 0.8, "wall"),
 
@@ -165,12 +165,12 @@ export class MainScene extends Phaser.Scene {
     this.appendWall();
     // this.appendWall();
 
-    this.physics.add.overlap($.player, $.cave, this.onHit.bind(this));
-    this.physics.add.overlap($.player, $.walls, this.onHit.bind(this));
+    // this.physics.add.overlap($.player, $.cave, this.onHit.bind(this));
+    // this.physics.add.overlap($.player, $.walls, this.onHit.bind(this));
 
     this.physics.pause();
 
-    // this.start();
+    this.start();
   }
 
   maybeRemoveCaveBlockPair() {
@@ -225,7 +225,7 @@ export class MainScene extends Phaser.Scene {
   appendCaveBlockPair() {
     const $ = this.fields;
     const lastWall = $.cave.getLast(true);
-    const x = lastWall.x + WALL_WIDTH - GAP_HACK; //
+    const x = lastWall.body.x + 2 * WALL_WIDTH;
 
     const item = $.caveShapeGenerator.next();
     if (item.done) {
@@ -235,13 +235,13 @@ export class MainScene extends Phaser.Scene {
     const ceilingBlock = $.cave
       .create(x, ceiling, "tall-wall")
       .setOrigin(1, 1)
-      // .setAlpha(segmentIndex % 2 === 0 ? 0.6 : 0.35)
+      .setAlpha(segmentIndex % 2 === 0 ? 0.6 : 0.35)
       .setVelocityX(-HORIZONTAL_SPEED);
 
     const floorBlock = $.cave
       .create(x, floor, "tall-wall")
       .setOrigin(1, 0)
-      // .setAlpha(segmentIndex % 2 === 0 ? 0.6 : 0.35)
+      .setAlpha(segmentIndex % 2 === 0 ? 0.6 : 0.35)
       .setVelocityX(-HORIZONTAL_SPEED);
 
     if ($.currentColor) {
