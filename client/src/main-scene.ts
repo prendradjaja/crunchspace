@@ -342,6 +342,7 @@ export class MainScene extends Phaser.Scene {
     wall: PT.Physics.Arcade.GameObjectWithBody
   ) {
     const $ = this.fields;
+    const globals = window as any;
     if (!$.stopped) {
       $.stopped = true;
       this.physics.pause();
@@ -350,6 +351,7 @@ export class MainScene extends Phaser.Scene {
       $.starEmitters.map((emitter) => emitter.pause());
       const bestScore = +(localStorage.getItem(HIGH_SCORE_KEY) || 0);
       const score = $.score;
+      globals.onGameOver(Math.floor(score));
       if (score > bestScore) {
         localStorage.setItem(HIGH_SCORE_KEY, $.score.toFixed(0));
       }

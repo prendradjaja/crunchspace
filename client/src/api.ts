@@ -1,13 +1,18 @@
-interface HighScore {
+export interface HighScore {
   player: string;
   score: number;
 }
 
 export function getHighScores(): Promise<HighScore[]> {
+  // return Promise.resolve([
+  //   { player: "bobby-brown", score: 100 },
+  //   { player: "kt", score: Math.floor(Math.random() * 10) },
+  // ]);
   return myFetch("/api/high-score").then((response) => response.json());
 }
 
 export function createHighScore(body: HighScore): Promise<void> {
+  // return Promise.resolve();
   return myFetch("/api/high-score", {
     method: "POST",
     headers: {
