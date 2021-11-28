@@ -13,7 +13,7 @@ import {
   BLOCK_LIMIT,
   POINTS_PER_SECOND,
 } from "./constants";
-import { take } from "./util";
+import { take, randomInt } from "./util";
 import { makeCaveShapeGenerator } from "./cave-shape-generator";
 
 // I wish I could infer type after declaration, but I guess I can't :(
@@ -22,6 +22,7 @@ function initFields(this: MainScene) {
   return {
     player: this.physics.add.sprite(WIDTH * 0.2, HEIGHT * 0.5, "player"),
     cave: this.physics.add.group(),
+    walls: this.physics.add.group(),
     cursors: this.input.keyboard.createCursorKeys(),
     pointer: this.game.input.mousePointer,
     caveShapeGenerator: makeCaveShapeGenerator(),
@@ -36,7 +37,7 @@ function initFields(this: MainScene) {
     }),
     startTimeMillis: undefined as number | undefined,
     score: this.add
-      .text(0, 0, "hello", {
+      .text(0, 0, "", {
         fontSize: "90px",
         color: "black",
         backgroundColor: "white",
@@ -77,6 +78,7 @@ export class MainScene extends Phaser.Scene {
     const globals = window as any;
     globals.scene = this;
     globals.camera = this.cameras.cameras[0];
+    // globals.camera.setZoom(0.2);
 
     // this.add.image(WIDTH * 0.2, HEIGHT * 0.8, "wall"),
 
@@ -95,13 +97,25 @@ export class MainScene extends Phaser.Scene {
       $.player.body.setSize(55 * hitboxScale, 37 * hitboxScale);
     }
 
+    this.addFirstWall();
+    this.appendWall();
+    // this.appendWall();
+
     this.addFirstCaveBlockPair();
     for (let i = 0; i < BLOCK_LIMIT; i++) {
       this.appendCaveBlockPair();
     }
     this.physics.add.overlap($.player, $.cave, this.onHit.bind(this));
+    this.physics.add.overlap($.player, $.walls, this.onHit.bind(this));
 
     this.physics.pause();
+  }
+
+  updateWalls() {
+    // const $ = this.fields;
+    // if ($.walls.getFirst(true).x < WIDTH * 0.80) {
+    //   const child = $.cave.getFirst(true);
+    // }
   }
 
   maybeRemoveCaveBlockPair() {
@@ -111,6 +125,17 @@ export class MainScene extends Phaser.Scene {
         const child = $.cave.getFirst(true);
         $.cave.remove(child, true, true);
       }
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  maybeRemoveWall() {
+    const $ = this.fields;
+    if ($.walls.getFirst(true).x < 0) {
+      const child = $.walls.getFirst(true);
+      $.walls.remove(child, true, true);
       return true;
     } else {
       return false;
@@ -132,6 +157,13 @@ export class MainScene extends Phaser.Scene {
     $.cave
       .create(x, floorY, "tall-wall")
       .setOrigin(1, 0.5)
+      .setVelocityX(-HORIZONTAL_SPEED);
+  }
+
+  addFirstWall() {
+    const $ = this.fields;
+    $.walls
+      .create(WIDTH * 1.2, HEIGHT / 2, "wall")
       .setVelocityX(-HORIZONTAL_SPEED);
   }
 
@@ -158,6 +190,18 @@ export class MainScene extends Phaser.Scene {
       .setVelocityX(-HORIZONTAL_SPEED);
   }
 
+  appendWall() {
+    const $ = this.fields;
+    const lastWall = $.walls.getLast(true);
+    const x = lastWall.x + WIDTH * 0.9; //
+    const y = randomInt(0, HEIGHT);
+
+    $.walls
+      .create(x, y, "wall")
+      // .setAlpha(segmentIndex % 2 === 0 ? 0.6 : 0.35)
+      .setVelocityX(-HORIZONTAL_SPEED);
+  }
+
   update() {
     const $ = this.fields;
     if ($.cursors.space.isDown || $.pointer.isDown) {
@@ -173,10 +217,17 @@ export class MainScene extends Phaser.Scene {
       );
     }
     const offset = 300;
+
     const removed = this.maybeRemoveCaveBlockPair();
     if (removed) {
       this.appendCaveBlockPair();
     }
+
+    const removedWall = this.maybeRemoveWall();
+    if (removedWall) {
+      this.appendWall();
+    }
+
     if (!$.stopped && $.startTimeMillis) {
       $.score.setText(
         (
