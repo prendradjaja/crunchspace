@@ -12,7 +12,7 @@ class Greeter {
 
 const greeter = new Greeter("world");
 
-const button = document.getElementById('myButton')!;
+const button = document.getElementById("myButton")!;
 button.onclick = () => {
   alert(greeter.greet());
 };
