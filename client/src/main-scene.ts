@@ -45,6 +45,17 @@ export class MainScene extends Phaser.Scene {
     $.player.setCollideWorldBounds(true);
     $.wall.setVelocityX(-HORIZONTAL_SPEED);
     this.physics.add.overlap($.player, $.wall, this.onHit.bind(this));
+
+    var particles = this.add.particles("dot");
+
+    var emitter = particles.createEmitter({
+      speedX: -HORIZONTAL_SPEED,
+      scale: { start: 1, end: 0 },
+      blendMode: "ADD",
+      lifespan: 500,
+      frequency: 50,
+    });
+    emitter.startFollow($.player);
   }
 
   update() {
