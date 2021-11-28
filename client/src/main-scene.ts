@@ -21,10 +21,10 @@ function initFields(this: MainScene) {
 }
 
 let HIDE_PLAYER = false;
-// HIDE_PLAYER = true;
+HIDE_PLAYER = true;
 
 let HIDE_CAVE = false;
-// HIDE_CAVE = true;
+HIDE_CAVE = true;
 
 type Fields = ReturnType<typeof initFields>;
 
@@ -45,6 +45,8 @@ export class MainScene extends Phaser.Scene {
   }
 
   create() {
+    // this.add.image(WIDTH * 0.2, HEIGHT * 0.8, "wall"),
+
     this.fields = initFields.bind(this)();
     const $ = this.fields;
 
@@ -79,7 +81,7 @@ export class MainScene extends Phaser.Scene {
       this.physics.add.overlap($.player, $.cave, this.onHit.bind(this));
     }
 
-    // this.physics.pause();
+    this.physics.pause();
   }
 
   update() {
