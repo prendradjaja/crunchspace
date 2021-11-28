@@ -6,17 +6,33 @@
     <title>crunchspace</title>
     <style>
       body {
+        text-align: center;
+        background: #222222;
+        color: white;
         /* margin-top: 200px; */
+      }
+
+      #loading-message {
+        display: none;
+      }
+      .loading #loading-message {
+        margin: 100px;
+        display: block;
+      }
+      marquee {
+        font-size: 20px;
+        font-weight: bold;
+        max-width: 500px;
+        font-family: monospace;
       }
     </style>
   </head>
-  <body>
+  <body class="loading">
+    <div id="loading-message">
+      <h2>crunchspace is loading</h2>
+      <marquee>&bull; &bull; &bull;</marquee>
+    </div>
     <div id="game-container"></div>
-
-    <p><strong>Click to start</strong></p>
-    <p>Click and hold to go up</p>
-    <p>Release to go down</p>
-    <p>Spacebar works too</p>
 
     <pre id="scoreboard"></pre>
 

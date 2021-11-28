@@ -21,6 +21,7 @@ const config: PT.Core.GameConfig = {
   scene: [MainScene],
 };
 
+document.body.classList.remove("loading");
 const game = new Phaser.Game(config);
 
 showHighScores();
