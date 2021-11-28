@@ -9,6 +9,8 @@
     "declaration": true,
     "target": "es2015",
     "lib": ["es2017", "dom"],
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
     "outDir": "dist",
     "rootDir": "./",
     "baseUrl": ".",
