@@ -23,6 +23,9 @@ function initFields(this: MainScene) {
 let HIDE_PLAYER = false;
 // HIDE_PLAYER = true;
 
+let HIDE_CAVE = false;
+// HIDE_CAVE = true;
+
 type Fields = ReturnType<typeof initFields>;
 
 export class MainScene extends Phaser.Scene {
@@ -63,16 +66,18 @@ export class MainScene extends Phaser.Scene {
     });
     emitter.startFollow($.player);
 
-    for (let i = 0; i < 50; i++) {
-      const WALL_WIDTH = 120;
-      const WAVE_SIZE = 500;
-      const x = 0.5 * WIDTH + i * WALL_WIDTH;
-      const y = 500 * Math.cos((i * Math.PI * 2) / 40);
-      $.cave.create(x, -800 + y + 0.5 * HEIGHT, "tall-wall");
-      $.cave.create(x, 800 + y + 0.5 * HEIGHT, "tall-wall");
+    if (!HIDE_CAVE) {
+      for (let i = 0; i < 50; i++) {
+        const WALL_WIDTH = 120;
+        const WAVE_SIZE = 500;
+        const x = 0.0 * WIDTH + i * WALL_WIDTH;
+        const y = 500 * Math.cos((i * Math.PI * 2) / 40);
+        $.cave.create(x, -800 + y + 0.5 * HEIGHT, "tall-wall");
+        $.cave.create(x, 800 + y + 0.5 * HEIGHT, "tall-wall");
+      }
+      $.cave.setVelocityX(-HORIZONTAL_SPEED);
+      this.physics.add.overlap($.player, $.cave, this.onHit.bind(this));
     }
-    $.cave.setVelocityX(-HORIZONTAL_SPEED);
-    this.physics.add.overlap($.player, $.cave, this.onHit.bind(this));
 
     // this.physics.pause();
   }
