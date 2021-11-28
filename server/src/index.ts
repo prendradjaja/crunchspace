@@ -18,6 +18,9 @@ app.use(express.static("../client/dist/"));
 
 const pgPool = new Pool({
   connectionString: DATABASE_URL,
+  ssl: {
+    rejectUnauthorized: false,
+  },
   // TODO Use SSL in production?
 });
 
