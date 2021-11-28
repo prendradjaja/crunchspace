@@ -41,6 +41,7 @@ export class MainScene extends Phaser.Scene {
   create() {
     this.fields = initFields.bind(this)();
     const $ = this.fields;
+    $.player.body.gravity.y = GRAVITY;
     $.player.setCollideWorldBounds(true);
     $.wall.setVelocityX(-HORIZONTAL_SPEED);
     this.physics.add.overlap($.player, $.wall, this.onHit.bind(this));
@@ -49,11 +50,14 @@ export class MainScene extends Phaser.Scene {
   update() {
     const $ = this.fields;
     if ($.cursors.space.isDown || $.pointer.isDown) {
-      $.player.body.gravity.y = GRAVITY;
       // It feels kinda sudden to instantly stop accelerating at MAX_CLIMB_SPEED. Does the original game smooth that out?
       $.player.setVelocityY(
         Math.max($.player.body.velocity.y - LIFT, -MAX_CLIMB_SPEED)
       );
+    }
+    const offset = 300;
+    if ($.wall.body.position.x < -offset) {
+      $.wall.setX(WIDTH + offset);
     }
   }
 
