@@ -96,22 +96,6 @@ export class MainScene extends Phaser.Scene {
     }
     this.physics.add.overlap($.player, $.cave, this.onHit.bind(this));
 
-    // let i = 0;
-    // for (let item of $.caveShapeGenerator) {
-    //   const x = 0.0 * WIDTH + i * WALL_WIDTH;
-    //   // const { equator, ceiling, floor } = item;
-    //   const { equator } = item;
-    //   $.cave.create(x, equator, "dot");
-    //   // $.cave.create(x, floor, "dot").setTint(0xff0000);
-    //   // $.cave.create(x, ceiling, "dot").setTint(0x0000ff);
-    //   i++;
-    // }
-
-    // this.add.image(0, 0, 'wall').setOrigin(0, 0);
-    // this.add.image(WIDTH, HEIGHT, 'wall').setOrigin(1, 1);
-
-    // $.cave.setVelocityX(-HORIZONTAL_SPEED);
-
     // this.physics.pause();
   }
 
@@ -183,13 +167,7 @@ export class MainScene extends Phaser.Scene {
     if (removed) {
       this.appendCaveBlockPair();
     }
-    // this.physics.pause();
   }
-
-  // render() {
-  //   const $ = this.fields;
-  //   this.debug.body($.player);
-  // }
 
   onHit(
     player: PT.Physics.Arcade.GameObjectWithBody,
