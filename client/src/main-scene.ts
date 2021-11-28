@@ -1,13 +1,20 @@
 import Phaser, { Types as PT } from "phaser";
 
-import { WIDTH, HEIGHT, GRAVITY, LIFT, MAX_CLIMB_SPEED } from "./constants";
+import {
+  WIDTH,
+  HEIGHT,
+  GRAVITY,
+  LIFT,
+  MAX_CLIMB_SPEED,
+  HORIZONTAL_SPEED,
+} from "./constants";
 
 // I wish I could infer type after declaration, but I guess I can't :(
 // https://stackoverflow.com/questions/54541049/infer-typescript-type-from-assignment-after-declaration
 function initFields(this: MainScene) {
   return {
     player: this.physics.add.sprite(WIDTH * 0.2, HEIGHT * 0.5, "player"),
-    wall: this.physics.add.sprite(WIDTH * 0.6, HEIGHT * 0.5, "wall"),
+    wall: this.physics.add.sprite(WIDTH * 0.9, HEIGHT * 0.5, "wall"),
     cursors: this.input.keyboard.createCursorKeys(),
     pointer: this.game.input.mousePointer,
   };
@@ -35,7 +42,7 @@ export class MainScene extends Phaser.Scene {
     this.fields = initFields.bind(this)();
     const $ = this.fields;
     $.player.setCollideWorldBounds(true);
-    $.wall.setVelocityX(-400);
+    $.wall.setVelocityX(-HORIZONTAL_SPEED);
     this.physics.add.overlap($.player, $.wall, this.onHit.bind(this));
   }
 
