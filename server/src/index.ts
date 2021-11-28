@@ -9,6 +9,8 @@ if (!DATABASE_URL) {
   process.exit(1);
 }
 
+console.log("dburl:", DATABASE_URL);
+
 // Optional variables
 const PORT = process.env.PORT || 8000;
 
