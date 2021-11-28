@@ -1,0 +1,6 @@
+CREATE TABLE score (
+  id SERIAL PRIMARY KEY,
+  player VARCHAR(100) NOT NULL,
+  score INTEGER NOT NULL,
+  created_at TIMESTAMPTZ
+);

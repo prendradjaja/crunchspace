@@ -22,6 +22,17 @@ export function createHighScore(body: HighScore): Promise<void> {
   }).then(() => undefined);
 }
 
+export function createScore(body: HighScore): Promise<void> {
+  // return Promise.resolve();
+  return myFetch("/api/score", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(body),
+  }).then(() => undefined);
+}
+
 /**
  * Rejects upon non-2XX (fetch doesn't do this!).
  */

@@ -2,7 +2,7 @@ import Phaser, { Types as PT } from "phaser";
 
 import { MainScene } from "./main-scene";
 import { WIDTH, HEIGHT, ORIGINAL_ASSETS } from "./constants";
-import { HighScore, createHighScore, getHighScores } from "./api";
+import { HighScore, createHighScore, getHighScores, createScore } from "./api";
 import { randomInt } from "./util";
 
 const config: PT.Core.GameConfig = {
@@ -71,6 +71,7 @@ function showHighScores(): Promise<HighScore[]> {
 }
 
 function onGameOver(myScore: number) {
+  createScore({ player: "anon-sys-01", score: myScore });
   showHighScores().then((paddedScores) => {
     const worstScore = paddedScores[MAX_SCORES - 1].score;
     if (myScore > worstScore) {
