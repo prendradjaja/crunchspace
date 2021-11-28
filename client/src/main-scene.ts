@@ -11,6 +11,7 @@ import {
   ORIGINAL_ASSETS,
   GAP_HACK,
   BLOCK_LIMIT,
+  POINTS_PER_SECOND,
 } from "./constants";
 import { take } from "./util";
 import { makeCaveShapeGenerator } from "./cave-shape-generator";
@@ -33,6 +34,14 @@ function initFields(this: MainScene) {
       lifespan: 500,
       frequency: 50,
     }),
+    startTimeMillis: undefined as number | undefined,
+    score: this.add
+      .text(0, 0, "hello", {
+        fontSize: "90px",
+        color: "black",
+        backgroundColor: "white",
+      })
+      .setDepth(1),
   };
 }
 
@@ -154,6 +163,7 @@ export class MainScene extends Phaser.Scene {
     if ($.cursors.space.isDown || $.pointer.isDown) {
       if (!$.started) {
         $.started = true;
+        $.startTimeMillis = new Date().valueOf();
         this.physics.resume();
         $.emitter.startFollow($.player, -120);
       }
@@ -166,6 +176,16 @@ export class MainScene extends Phaser.Scene {
     const removed = this.maybeRemoveCaveBlockPair();
     if (removed) {
       this.appendCaveBlockPair();
+    }
+    if (!$.stopped && $.startTimeMillis) {
+      $.score.setText(
+        (
+          ((new Date().valueOf() - $.startTimeMillis) / 1000) *
+          POINTS_PER_SECOND
+        )
+          .toFixed(0)
+          .toString()
+      );
     }
   }
 
@@ -180,7 +200,7 @@ export class MainScene extends Phaser.Scene {
       $.player.setTint(0xff0000);
       $.emitter.pause();
       this.time.addEvent({
-        delay: 500,
+        delay: 1000,
         callback: () => {
           this.scene.restart();
         },

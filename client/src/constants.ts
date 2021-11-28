@@ -10,6 +10,8 @@ ORIGINAL_ASSETS = false;
 export const BLOCK_LIMIT = 24; // How many block pairs to render at once?
 export const GAP_HACK = 30;
 
+export const POINTS_PER_SECOND = 25;
+
 // Careful! Modifying below this line may break stuff -------------------------
 export const WIDTH = 1918;
 export const HEIGHT = 1438;
