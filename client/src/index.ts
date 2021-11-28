@@ -75,7 +75,9 @@ function onGameOver(myScore: number) {
     const worstScore = paddedScores[MAX_SCORES - 1].score;
     if (myScore > worstScore) {
       setTimeout(() => {
-        const name = window.prompt("New high score! What's your name?")?.trim();
+        const name = window
+          .prompt("New high score! What's your name? (5 characters max)")
+          ?.trim();
         if (name) {
           createHighScore({ player: name, score: myScore }).then(
             () => showHighScores(),
