@@ -5,11 +5,17 @@
   "main": "index.js",
   "scripts": {
     "format": "prettier --write .",
+    "prepare-husky": "husky install",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "husky": "7.0.4",
+    "lint-staged": "12.0.3",
     "prettier": "2.5.0"
+  },
+  "lint-staged": {
+    "**/*": "prettier --write --ignore-unknown"
   }
 }
