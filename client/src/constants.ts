@@ -17,6 +17,9 @@ export const HIGH_SCORE_KEY = "crunchspace/high-score";
 export const STAR_SPEED = HORIZONTAL_SPEED / 5;
 export const STAR_LIFESPAN = 12000;
 
+export const COLORS_ENABLED = false;
+export const STARS_ENABLED = false;
+
 // Careful! Modifying below this line may break stuff -------------------------
 export const WIDTH = 1918;
 export const HEIGHT = 1438;

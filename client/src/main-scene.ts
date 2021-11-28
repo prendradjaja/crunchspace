@@ -15,6 +15,8 @@ import {
   HIGH_SCORE_KEY,
   STAR_SPEED,
   STAR_LIFESPAN,
+  STARS_ENABLED,
+  COLORS_ENABLED,
 } from "./constants";
 import { take, randomInt, randomChoice } from "./util";
 import { makeCaveShapeGenerator } from "./cave-shape-generator";
@@ -73,23 +75,30 @@ function initFields(this: MainScene) {
       }),
     ],
     startTimeMillis: undefined as number | undefined,
-    score: this.add
-      .text(0, 0, localStorage.getItem(HIGH_SCORE_KEY) || "", {
+    scoreText: this.add
+      .text(0, 0, highScoreText(), {
         fontSize: "90px",
         color: "black",
-        backgroundColor: "#5fe566",
+        // backgroundColor: "#5fe566",
       })
       .setDepth(1),
-    lastScore: undefined as string | undefined,
+    score: 0,
     colors: [
-      // 0x127475, // skobeloff (darkish teal)
-      // 0x562C2C, // caput mortuum (reddish brown)
-      // 0x214E34, // british racing green
-      // 0x153131, // rich black (dark teal)
-      // 0x404E4D, // dark slate gray
-      // 0x7E7F9A, // rhythm (light bluish gray)
-      // 0x823200, // saddle brown
-      // 0xAE8E1C, // dark goldenrod
+      { cutoff: 100, color: 0x127475 }, // skobeloff (darkish teal)
+      { cutoff: 1250, color: 0x562c2c }, // caput mortuum (reddish brown)
+      { cutoff: 1500, color: 0x214e34 }, // british racing green
+
+      // TODO purple instead of teal?
+      { cutoff: 1750, color: 0x153131 }, // rich black (dark teal)
+
+      // TODO prob something else if above is purple
+      { cutoff: 2000, color: 0x7e7f9a }, // rhythm (light bluish gray)
+      // { cutoff: , color: 0x404E4D }, // dark slate gray
+      // { cutoff: , color: 0x823200 }, // saddle brown
+      // { cutoff: , color: 0xAE8E1C }, // dark goldenrod
+
+      { cutoff: Infinity, color: 0xffffff },
+
       // 0x370926, // dark purple (wine) -- TOO DARK
     ].reverse(),
     currentColor: undefined as number | undefined,
@@ -161,7 +170,7 @@ export class MainScene extends Phaser.Scene {
 
     this.physics.pause();
 
-    this.start();
+    // this.start();
   }
 
   maybeRemoveCaveBlockPair() {
@@ -307,24 +316,21 @@ export class MainScene extends Phaser.Scene {
     }
 
     const removedWall = this.maybeRemoveWall();
+
+    if (!$.stopped && $.startTimeMillis) {
+      const score =
+        ((new Date().valueOf() - $.startTimeMillis) / 1000) * POINTS_PER_SECOND;
+
+      $.scoreText.setText(score.toFixed(0).toString());
+      $.score = score;
+    }
+
     if (removedWall) {
-      $.currentColor = $.colors.pop();
+      this.maybeNextColor();
       this.appendWall();
     }
 
-    if (!$.stopped && $.startTimeMillis) {
-      const score = (
-        ((new Date().valueOf() - $.startTimeMillis) / 1000) *
-        POINTS_PER_SECOND
-      )
-        .toFixed(0)
-        .toString();
-
-      $.score.setText(score);
-      $.lastScore = score;
-    }
-
-    if ($.started && !$.stopped && Math.random() < 0.2) {
+    if (STARS_ENABLED && $.started && !$.stopped && Math.random() < 0.2) {
       const emitter = randomChoice($.starEmitters);
       emitter.emitParticle(1, WIDTH, randomInt(0, HEIGHT));
     }
@@ -341,7 +347,11 @@ export class MainScene extends Phaser.Scene {
       $.player.setTint(0xff0000);
       $.emitter.pause();
       $.starEmitters.map((emitter) => emitter.pause());
-      localStorage.setItem(HIGH_SCORE_KEY, "Best: " + $.lastScore);
+      const bestScore = +(localStorage.getItem(HIGH_SCORE_KEY) || 0);
+      const score = $.score;
+      if (score > bestScore) {
+        localStorage.setItem(HIGH_SCORE_KEY, $.score.toFixed(0));
+      }
       this.time.addEvent({
         delay: 1000,
         callback: () => {
@@ -350,10 +360,33 @@ export class MainScene extends Phaser.Scene {
       });
     }
   }
+
+  maybeNextColor(): void {
+    if (!COLORS_ENABLED) return;
+
+    const $ = this.fields;
+    const { cutoff, color } = $.colors.slice(-1)[0];
+    if ($.score > cutoff) {
+      $.colors.pop();
+      $.currentColor = color;
+    }
+  }
 }
 
-// document.body.onkeydown = () => {
-//   const globals = window as any;
-//   let $ = globals.scene.fields;
-//   $.currentColor = $.colors.pop()
+function highScoreText() {
+  const score = localStorage.getItem(HIGH_SCORE_KEY);
+  if (score) {
+    return `Best: ${score}`;
+  } else {
+    return "";
+  }
+}
+
+// document.body.onkeydown = (event) => {
+//   if (event.key === "'") {
+//     const globals = window as any;
+//     let $ = globals.scene.fields;
+//     const color = $.colors.pop().color;
+//     $.currentColor = color;
+//   }
 // }
