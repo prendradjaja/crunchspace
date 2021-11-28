@@ -3,6 +3,7 @@ import {
   caveHeightRange,
   maxDeltaYRange,
   minDeltaXRange,
+  MAX_DELTA_X,
   MAX_DIFFICULTY_DISTANCE,
   MARGIN,
 } from "./constants";
@@ -13,19 +14,43 @@ import { LinearScale } from "./linear-scale";
 new LinearScale([1, 2], [3, 4]);
 
 export function* makeCaveShapeGenerator() {
+  let elevation = 0;
   while (true) {
-    let segmentLength = randomInt(3, 10);
     const caveHeight = caveHeightRange.HARD;
-    const wiggleRoom = HEIGHT - caveHeight - 2 * MARGIN;
+    const maxDeltaY = maxDeltaYRange.HARD;
+    const minDeltaX = minDeltaXRange.HARD;
+    const maxElevation = HEIGHT - caveHeight - 2 * MARGIN;
+
+    let { targetElevation, segmentLength } = makeRandomSegment(
+      elevation,
+      caveHeight,
+      maxDeltaY,
+      minDeltaX,
+      maxElevation
+    );
     for (let i = 0; i < segmentLength; i++) {
-      let floor = HEIGHT - MARGIN;
-      if (i % 2 === 0) {
-        floor -= wiggleRoom;
-      }
+      elevation = targetElevation;
+      let floor = HEIGHT - MARGIN - elevation;
       const ceiling = floor - caveHeight;
+
       yield { ceiling, floor };
     }
   }
+}
+
+function makeRandomSegment(
+  elevation: number,
+  caveHeight: number,
+  maxDeltaY: number,
+  minDeltaX: number,
+  maxElevation: number
+) {
+  const hi = Math.min(elevation + maxDeltaY, maxElevation);
+  const lo = Math.max(elevation - maxDeltaY, 0);
+
+  const targetElevation = randomInt(lo, hi);
+  const segmentLength = randomInt(minDeltaX, MAX_DELTA_X);
+  return { targetElevation, segmentLength };
 }
 
 // function* heights() {

@@ -32,6 +32,8 @@ export const minDeltaXRange = {
   HARD: 1,
 };
 
+export const MAX_DELTA_X = 16; // in blocks
+
 // export const MAX_DIFFICULTY_DISTANCE = 203; // in blocks
 export const MAX_DIFFICULTY_DISTANCE = 5;
 
