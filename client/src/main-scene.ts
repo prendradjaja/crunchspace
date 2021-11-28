@@ -9,6 +9,8 @@ import {
   HORIZONTAL_SPEED,
   WALL_WIDTH,
   ORIGINAL_ASSETS,
+  GAP_HACK,
+  BLOCK_LIMIT,
 } from "./constants";
 import { take } from "./util";
 import { makeCaveShapeGenerator } from "./cave-shape-generator";
@@ -26,7 +28,7 @@ function initFields(this: MainScene) {
 }
 
 let HIDE_PLAYER = false;
-HIDE_PLAYER = true;
+// HIDE_PLAYER = true;
 
 let HIDE_CAVE = false;
 HIDE_CAVE = true;
@@ -87,7 +89,7 @@ export class MainScene extends Phaser.Scene {
     emitter.startFollow($.player, -120);
 
     this.addFirstCaveBlockPair();
-    for (let i = 0; i < 16; i++) {
+    for (let i = 0; i < BLOCK_LIMIT; i++) {
       this.appendCaveBlockPair();
     }
     this.physics.add.overlap($.player, $.cave, this.onHit.bind(this));
@@ -129,7 +131,7 @@ export class MainScene extends Phaser.Scene {
   appendCaveBlockPair() {
     const $ = this.fields;
     const lastWall = $.cave.getLast(true);
-    const x = lastWall.x + WALL_WIDTH; //
+    const x = lastWall.x + WALL_WIDTH - GAP_HACK; //
 
     const item = $.caveShapeGenerator.next();
     if (item.done) {

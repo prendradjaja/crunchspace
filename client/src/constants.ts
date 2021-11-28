@@ -7,6 +7,9 @@ export const HORIZONTAL_SPEED = 1000;
 export let ORIGINAL_ASSETS = true;
 ORIGINAL_ASSETS = false;
 
+export const BLOCK_LIMIT = 24; // How many block pairs to render at once?
+export const GAP_HACK = 30;
+
 // Careful! Modifying below this line may break stuff -------------------------
 export const WIDTH = 1918;
 export const HEIGHT = 1438;
