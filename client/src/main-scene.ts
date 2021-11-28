@@ -80,7 +80,7 @@ export class MainScene extends Phaser.Scene {
     const globals = window as any;
     globals.scene = this;
     globals.camera = this.cameras.cameras[0];
-    // globals.camera.setZoom(0.2);
+    // globals.camera.setZoom(0.5);
 
     // this.add.image(WIDTH * 0.2, HEIGHT * 0.8, "wall"),
 
@@ -99,25 +99,19 @@ export class MainScene extends Phaser.Scene {
       $.player.body.setSize(55 * hitboxScale, 37 * hitboxScale);
     }
 
-    this.addFirstWall();
-    this.appendWall();
-    // this.appendWall();
-
     this.addFirstCaveBlockPair();
     for (let i = 0; i < BLOCK_LIMIT; i++) {
       this.appendCaveBlockPair();
     }
+
+    this.addFirstWall();
+    this.appendWall();
+    // this.appendWall();
+
     this.physics.add.overlap($.player, $.cave, this.onHit.bind(this));
     this.physics.add.overlap($.player, $.walls, this.onHit.bind(this));
 
     this.physics.pause();
-  }
-
-  updateWalls() {
-    // const $ = this.fields;
-    // if ($.walls.getFirst(true).x < WIDTH * 0.80) {
-    //   const child = $.cave.getFirst(true);
-    // }
   }
 
   maybeRemoveCaveBlockPair() {
@@ -195,8 +189,10 @@ export class MainScene extends Phaser.Scene {
   appendWall() {
     const $ = this.fields;
     const lastWall = $.walls.getLast(true);
-    const x = lastWall.x + WIDTH * 0.9; //
-    const y = randomInt(0, HEIGHT);
+    const [caveCeiling, caveFloor] = $.cave.children.entries.slice(-2);
+    const x = lastWall.x + WIDTH * 0.75; //
+    // @ts-ignore
+    const y = randomInt(caveFloor.y, caveCeiling.y);
 
     $.walls
       .create(x, y, "wall")
