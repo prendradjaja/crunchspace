@@ -40,4 +40,7 @@ heroku create
 git push heroku main
 heroku addons:create heroku-postgresql:hobby-dev
 heroku pg:psql < server/migrations/010--create-table-high-score.sql
+
+# Alternative version of the last command
+psql $(heroku config:get DATABASE_URL) < server/migrations/010--create-table-high-score.sql
 ```
