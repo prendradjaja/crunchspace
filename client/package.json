@@ -3,7 +3,7 @@
   "version": "0.1.0-SNAPSHOT",
   "description": "crunchspace client",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "jest",
     "serve": "webpack-cli serve --mode development",
     "build": "webpack"
   },
@@ -14,10 +14,15 @@
   "author": "",
   "license": "MIT",
   "devDependencies": {
+    "@babel/core": "7.16.0",
+    "@babel/preset-env": "7.16.4",
+    "@babel/preset-typescript": "7.16.0",
     "babel-core": "^6.26.3",
+    "babel-jest": "27.4.2",
     "babel-loader": "^8.2.3",
     "babel-preset-es2015": "^6.24.1",
     "html-webpack-plugin": "^5.5.0",
+    "jest": "27.4.3",
     "ts-loader": "^9.2.6",
     "typescript": "^4.5.2",
     "webpack": "^5.64.4",
