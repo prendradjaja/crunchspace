@@ -60,7 +60,7 @@ function showHighScores(): Promise<HighScore[]> {
           );
 
     scoreboard.textContent =
-      "High scores:\n" +
+      "High scores:\n\n" +
       paddedScores
         .map((item) => {
           const name = item.player.slice(0, 5).padEnd(6);
