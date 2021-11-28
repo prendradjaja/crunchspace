@@ -76,12 +76,19 @@ function initFields(this: MainScene) {
     ],
     startTimeMillis: undefined as number | undefined,
     scoreText: this.add
-      .text(0, 0, highScoreText(), {
+      .text(10, 5, highScoreText(), {
         fontSize: "90px",
         color: "black",
         // backgroundColor: "#5fe566",
       })
       .setDepth(1),
+    scoreShadow: this.add
+      .text(15, 10, highScoreText(), {
+        fontSize: "90px",
+        color: "white",
+        // backgroundColor: "#5fe566",
+      })
+      .setDepth(-1),
     score: 0,
     colors: [
       { cutoff: 1000, color: 0x127475 }, // skobeloff (darkish teal)
@@ -323,7 +330,9 @@ export class MainScene extends Phaser.Scene {
       const score =
         ((new Date().valueOf() - $.startTimeMillis) / 1000) * POINTS_PER_SECOND;
 
-      $.scoreText.setText(score.toFixed(0).toString());
+      const scoreText = Math.floor(score).toString();
+      $.scoreText.setText(scoreText);
+      $.scoreShadow.setText(scoreText);
 
       // tab-out detection -- maybe just use tabunload or whatever
       if ($.score && score - $.score > 3) {
@@ -375,7 +384,7 @@ export class MainScene extends Phaser.Scene {
       const score = $.score;
       globals.onGameOver(Math.floor(score));
       if (score > bestScore) {
-        localStorage.setItem(HIGH_SCORE_KEY, $.score.toFixed(0));
+        localStorage.setItem(HIGH_SCORE_KEY, Math.floor(score).toString());
       }
       this.time.addEvent({
         delay: 1000,
