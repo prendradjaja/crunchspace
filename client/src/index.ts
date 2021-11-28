@@ -1,7 +1,7 @@
 import Phaser, { Types as PT } from "phaser";
 
 import { MainScene } from "./main-scene";
-import { WIDTH, HEIGHT, ORIGINAL_ASSETS } from "./constants";
+import { WIDTH, HEIGHT, ORIGINAL_ASSETS, PREVIOUS_NAME_KEY } from "./constants";
 import { HighScore, createHighScore, getHighScores, createScore } from "./api";
 import { randomInt } from "./util";
 
@@ -72,7 +72,10 @@ function showHighScores(): Promise<HighScore[]> {
 }
 
 function onGameOver(myScore: number) {
-  createScore({ player: "anon-sys-01", score: myScore });
+  createScore({
+    player: localStorage.getItem(PREVIOUS_NAME_KEY) || "anon-sys-02",
+    score: myScore,
+  });
   showHighScores().then((paddedScores) => {
     const worstScore = paddedScores[MAX_SCORES - 1].score;
     if (myScore > worstScore) {
@@ -85,6 +88,7 @@ function onGameOver(myScore: number) {
             () => showHighScores(),
             () => window.alert("Error: Unable to save high score")
           );
+          localStorage.setItem(PREVIOUS_NAME_KEY, name);
         }
       }, 0);
     }

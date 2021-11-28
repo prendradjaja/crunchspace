@@ -13,6 +13,7 @@ export const GAP_HACK = 30;
 export const POINTS_PER_SECOND = 25;
 
 export const HIGH_SCORE_KEY = "crunchspace/high-score";
+export const PREVIOUS_NAME_KEY = "crunchspace/previous-name";
 
 export const STAR_SPEED = HORIZONTAL_SPEED / 5;
 export const STAR_LIFESPAN = 12000;

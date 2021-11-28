@@ -1,0 +1,10 @@
+HIGH_SCORE table is for user-submitted high scores.
+
+SCORE table is for every single score achieved (even if the user declined to
+submit). In this table:
+
+- "anon-sys-01" means "score was achieved before SCORE table was collecting
+  names"
+- "anon-sys-02" means "user did not have a previously-used name" -- SCORE
+  table is logged before HIGH_SCORE table, so it only uses the
+  "previously-used name" :(
