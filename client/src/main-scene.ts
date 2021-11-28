@@ -81,6 +81,18 @@ function initFields(this: MainScene) {
       })
       .setDepth(1),
     lastScore: undefined as string | undefined,
+    colors: [
+      // 0x127475, // skobeloff (darkish teal)
+      // 0x562C2C, // caput mortuum (reddish brown)
+      // 0x214E34, // british racing green
+      // 0x153131, // rich black (dark teal)
+      // 0x404E4D, // dark slate gray
+      // 0x7E7F9A, // rhythm (light bluish gray)
+      // 0x823200, // saddle brown
+      // 0xAE8E1C, // dark goldenrod
+      // 0x370926, // dark purple (wine) -- TOO DARK
+    ].reverse(),
+    currentColor: undefined as number | undefined,
   };
 }
 
@@ -149,7 +161,7 @@ export class MainScene extends Phaser.Scene {
 
     this.physics.pause();
 
-    // this.start();
+    this.start();
   }
 
   maybeRemoveCaveBlockPair() {
@@ -211,17 +223,24 @@ export class MainScene extends Phaser.Scene {
       return;
     }
     const { ceiling, floor, segmentIndex } = item.value;
-    $.cave
+    const ceilingBlock = $.cave
       .create(x, ceiling, "tall-wall")
       .setOrigin(1, 1)
       // .setAlpha(segmentIndex % 2 === 0 ? 0.6 : 0.35)
       .setVelocityX(-HORIZONTAL_SPEED);
 
-    $.cave
+    const floorBlock = $.cave
       .create(x, floor, "tall-wall")
       .setOrigin(1, 0)
       // .setAlpha(segmentIndex % 2 === 0 ? 0.6 : 0.35)
       .setVelocityX(-HORIZONTAL_SPEED);
+
+    if ($.currentColor) {
+      ceilingBlock.setTint($.currentColor);
+      floorBlock.setTint($.currentColor);
+      ceilingBlock.tintFill = true;
+      floorBlock.tintFill = true;
+    }
   }
 
   appendWall() {
@@ -250,10 +269,15 @@ export class MainScene extends Phaser.Scene {
     // Since the newly-created wall is positioned by its center, it can have
     // a maximum overlap of half (with the hack caveat above)
 
-    $.walls
+    const newWall = $.walls
       .create(x, y, "wall")
       // .setAlpha(segmentIndex % 2 === 0 ? 0.6 : 0.35)
       .setVelocityX(-HORIZONTAL_SPEED);
+
+    if ($.currentColor) {
+      newWall.setTint($.currentColor);
+      newWall.tintFill = true;
+    }
   }
 
   start() {
@@ -284,6 +308,7 @@ export class MainScene extends Phaser.Scene {
 
     const removedWall = this.maybeRemoveWall();
     if (removedWall) {
+      $.currentColor = $.colors.pop();
       this.appendWall();
     }
 
@@ -326,3 +351,9 @@ export class MainScene extends Phaser.Scene {
     }
   }
 }
+
+// document.body.onkeydown = () => {
+//   const globals = window as any;
+//   let $ = globals.scene.fields;
+//   $.currentColor = $.colors.pop()
+// }
