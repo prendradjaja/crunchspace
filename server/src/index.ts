@@ -10,8 +10,7 @@ const PORT = process.env.PORT || 8000;
 
 const app = express();
 app.use(express.json());
-
-// TODO serve static files -- will big files block API?
+app.use(express.static("../client/dist/"));
 
 app.get("/api/hello", (req: express.Request, res: express.Response) => {
   res.send({ message: "hello, world" });
