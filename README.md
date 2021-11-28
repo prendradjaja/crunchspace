@@ -37,7 +37,7 @@ Prerequisites: Heroku CLI
 
 ```
 heroku create
-git push heroku master
+git push heroku main
 heroku addons:create heroku-postgresql:hobby-dev
 heroku pg:psql < server/migrations/010--create-table-high-score.sql
 ```
