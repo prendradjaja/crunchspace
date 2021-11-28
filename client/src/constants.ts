@@ -10,23 +10,23 @@ export const HEIGHT = 1438;
 export const WALL_WIDTH = 120;
 
 // Measured (at scale 0.353) as 416 to 303
-const caveHeight = {
+export const caveHeight = {
   // in pixels
   EASY: 1178,
   HARD: 858,
 };
 
 // Measured (at scale 0.353) as 20 to 130
-const maxDeltaY = {
+export const maxDeltaY = {
   // in pixels
   EASY: 57,
   HARD: 368,
 };
 
-const minDeltaX = {
+export const minDeltaX = {
   // in blocks
   EASY: 8,
   HARD: 1,
 };
 
-const MAX_DIFFICULTY_DISTANCE = 700; // in distance
+export const MAX_DIFFICULTY_DISTANCE = 700; // in distance
