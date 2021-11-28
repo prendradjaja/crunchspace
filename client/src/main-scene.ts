@@ -6,16 +6,19 @@ import { WIDTH, HEIGHT, GRAVITY, LIFT, MAX_CLIMB_SPEED } from "./constants";
 // https://stackoverflow.com/questions/54541049/infer-typescript-type-from-assignment-after-declaration
 function initFields(this: MainScene) {
   return {
-    player: this.physics.add.sprite(WIDTH * 0.6, HEIGHT * 0.5, "player"),
+    player: this.physics.add.sprite(WIDTH * 0.2, HEIGHT * 0.5, "player"),
+    wall: this.physics.add.sprite(WIDTH * 0.6, HEIGHT * 0.5, "wall"),
     cursors: this.input.keyboard.createCursorKeys(),
     pointer: this.game.input.mousePointer,
   };
 }
 
+type Fields = ReturnType<typeof initFields>;
+
 export class MainScene extends Phaser.Scene {
   // Ignore "not assigned in constructor" error
   // @ts-ignore
-  fields: ReturnType<typeof initFields>;
+  fields: Fields;
 
   constructor() {
     super({ key: "MainScene" });
@@ -32,6 +35,8 @@ export class MainScene extends Phaser.Scene {
     this.fields = initFields.bind(this)();
     const $ = this.fields;
     $.player.setCollideWorldBounds(true);
+    $.wall.setVelocityX(-400);
+    this.physics.add.overlap($.player, $.wall, this.onHit.bind(this));
   }
 
   update() {
@@ -43,5 +48,13 @@ export class MainScene extends Phaser.Scene {
         Math.max($.player.body.velocity.y - LIFT, -MAX_CLIMB_SPEED)
       );
     }
+  }
+
+  onHit(
+    player: PT.Physics.Arcade.GameObjectWithBody,
+    wall: PT.Physics.Arcade.GameObjectWithBody
+  ) {
+    // this.physics.pause();
+    this.scene.restart();
   }
 }
