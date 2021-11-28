@@ -15,7 +15,7 @@ import { makeCaveShapeGenerator } from "./cave-shape-generator";
 // https://stackoverflow.com/questions/54541049/infer-typescript-type-from-assignment-after-declaration
 function initFields(this: MainScene) {
   return {
-    player: this.physics.add.sprite(WIDTH * 0.2, HEIGHT * 0.5, "player"),
+    player: this.physics.add.sprite(WIDTH * 0.2, HEIGHT * 0.7, "player"),
     cave: this.physics.add.group(),
     cursors: this.input.keyboard.createCursorKeys(),
     pointer: this.game.input.mousePointer,
