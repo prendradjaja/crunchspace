@@ -13,7 +13,7 @@ const config: PT.Core.GameConfig = {
       debug: false,
     },
   },
-  scale: { zoom: 1.07 },
+  scale: { zoom: 0.353 },
   scene: [MainScene],
 };
 
