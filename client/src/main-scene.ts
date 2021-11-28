@@ -12,6 +12,7 @@ import {
   GAP_HACK,
   BLOCK_LIMIT,
   POINTS_PER_SECOND,
+  HIGH_SCORE_KEY,
 } from "./constants";
 import { take, randomInt } from "./util";
 import { makeCaveShapeGenerator } from "./cave-shape-generator";
@@ -37,12 +38,13 @@ function initFields(this: MainScene) {
     }),
     startTimeMillis: undefined as number | undefined,
     score: this.add
-      .text(0, 0, "", {
+      .text(0, 0, localStorage.getItem(HIGH_SCORE_KEY) || "", {
         fontSize: "90px",
         color: "black",
         backgroundColor: "white",
       })
       .setDepth(1),
+    lastScore: undefined as string | undefined,
   };
 }
 
@@ -229,14 +231,15 @@ export class MainScene extends Phaser.Scene {
     }
 
     if (!$.stopped && $.startTimeMillis) {
-      $.score.setText(
-        (
-          ((new Date().valueOf() - $.startTimeMillis) / 1000) *
-          POINTS_PER_SECOND
-        )
-          .toFixed(0)
-          .toString()
-      );
+      const score = (
+        ((new Date().valueOf() - $.startTimeMillis) / 1000) *
+        POINTS_PER_SECOND
+      )
+        .toFixed(0)
+        .toString();
+
+      $.score.setText(score);
+      $.lastScore = score;
     }
   }
 
@@ -250,6 +253,7 @@ export class MainScene extends Phaser.Scene {
       this.physics.pause();
       $.player.setTint(0xff0000);
       $.emitter.pause();
+      localStorage.setItem(HIGH_SCORE_KEY, "Best: " + $.lastScore);
       this.time.addEvent({
         delay: 1000,
         callback: () => {

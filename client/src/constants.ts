@@ -12,6 +12,8 @@ export const GAP_HACK = 30;
 
 export const POINTS_PER_SECOND = 25;
 
+export const HIGH_SCORE_KEY = "crunchspace/high-score";
+
 // Careful! Modifying below this line may break stuff -------------------------
 export const WIDTH = 1918;
 export const HEIGHT = 1438;
