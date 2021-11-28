@@ -94,21 +94,39 @@ function initFields(this: MainScene) {
     score: 0,
     colors: [
       { cutoff: 1000, color: 0x127475 }, // skobeloff (darkish teal)
-      { cutoff: 1250, color: 0x562c2c }, // caput mortuum (reddish brown)
-      { cutoff: 1500, color: 0x214e34 }, // british racing green
+      { cutoff: 1500, color: 0x562c2c }, // caput mortuum (reddish brown)
+      { cutoff: 2000, color: 0x214e34 }, // british racing green
 
-      // TODO purple instead of teal?
-      { cutoff: 1750, color: 0x153131 }, // rich black (dark teal)
+      { cutoff: 2500, color: 0x7d387d }, // maximum purple
+      { cutoff: 3000, color: 0x153131 }, // rich black (dark teal)
+      { cutoff: 3500, color: 0xa80874 }, // flirt (hot pink)
+      { cutoff: 4000, color: 0x400588 }, // indigo
+      { cutoff: 4500, color: 0x4d0505 }, // black bean (dark red)
 
-      // TODO prob something else if above is purple
-      { cutoff: 2000, color: 0x7e7f9a }, // rhythm (light bluish gray)
-      // { cutoff: , color: 0x404E4D }, // dark slate gray
-      // { cutoff: , color: 0x823200 }, // saddle brown
-      // { cutoff: , color: 0xAE8E1C }, // dark goldenrod
+      { cutoff: 5000, color: 0xf6f8ff }, // ghost white
+      { cutoff: 5500, color: 0x9bdc9b }, // granny smith apple (light green)
+      { cutoff: 6000, color: 0x5c0bdf }, // han purple
+      { cutoff: 6500, color: 0xffeca7 }, // medium champagne (light yellow)
+      { cutoff: 7000, color: 0x963d5a }, // quinacridone magenta (light reddish magenta)
+      { cutoff: 7500, color: 0xffb800 }, // selective yellow
+      { cutoff: 8000, color: 0xd6f6ca }, // tea green (very light green)
+      { cutoff: 8500, color: 0x5eb1bf }, // maximum blue (light slate blue)
+      { cutoff: 9000, color: 0xf06543 }, // orange soda
+      { cutoff: 9500, color: 0xa2c2f3 }, // baby blue eyes
+
+      { cutoff: 10000, color: 0x146aff }, // cb primary blue
+      { cutoff: 12500, color: 0xe83f6f }, // paradise pink
+      { cutoff: 15000, color: 0x9a348e }, // violet crayola
+      { cutoff: 17500, color: 0x7785ac }, // shadow blue
+
+      { cutoff: 20000, color: 0xee6055 }, // fire opal
+      { cutoff: 25000, color: 0x279af1 }, // carolina blue
+
+      { cutoff: 30000, color: 0x88292f }, // antique ruby
+      { cutoff: 40000, color: 0x42113c }, // dark purple
+      { cutoff: 50000, color: 0x85cbe9 }, // sky blue
 
       { cutoff: Infinity, color: 0xffffff },
-
-      // 0x370926, // dark purple (wine) -- TOO DARK
     ].reverse(),
     currentColor: undefined as number | undefined,
   };
