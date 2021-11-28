@@ -52,7 +52,7 @@ function* heights() {
   let i = 0;
   while (true) {
     const x = Math.min(i / MAX_DIFFICULTY_DISTANCE, 1);
-    yield scale.applyScale(x);
+    yield scale.invoke(x);
     i++;
   }
 }

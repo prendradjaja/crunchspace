@@ -12,7 +12,7 @@ export class LinearScale {
   }
 
   // Equivalent to calling the scale in d3
-  applyScale(x: number) {
+  invoke(x: number) {
     return this.m * x + this.b;
   }
 }
