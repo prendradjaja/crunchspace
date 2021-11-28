@@ -7,7 +7,7 @@ export function getHighScores(): Promise<HighScore[]> {
   return myFetch("/api/high-score").then((response) => response.json());
 }
 
-export function createHighScore(body: HighScore) {
+export function createHighScore(body: HighScore): Promise<void> {
   return myFetch("/api/high-score", {
     method: "POST",
     headers: {
