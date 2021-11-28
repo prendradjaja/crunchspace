@@ -187,12 +187,30 @@ export class MainScene extends Phaser.Scene {
   }
 
   appendWall() {
+    // Walls shouldn't spawn fully inside the floor or ceiling (it's ok if
+    // they have overlap -- even a lot of overlap -- but shouldn't be totally
+    // hidden).
+    //
+    // Hack/caveat: Ideally, we look at the cave blocks that have the same x
+    // value as the new wall -- but simpler is just to look at the last cave
+    // blocks. This means that if cave blocks and walls spawn too far apart
+    // from each other in the x dimension, this check becomes less reliable!
+    // But they spawn pretty close to each other, so this should be fine.
+
     const $ = this.fields;
     const lastWall = $.walls.getLast(true);
     const [caveCeiling, caveFloor] = $.cave.children.entries.slice(-2);
     const x = lastWall.x + WIDTH * 0.75; //
-    // @ts-ignore
-    const y = randomInt(caveFloor.y, caveCeiling.y);
+
+    const y = randomInt(
+      // @ts-ignore
+      caveFloor.y, // The top of the floor
+      // @ts-ignore
+      caveCeiling.y // The bottom of the ceiling
+    );
+
+    // Since the newly-created wall is positioned by its center, it can have
+    // a maximum overlap of half (with the hack caveat above)
 
     $.walls
       .create(x, y, "wall")
