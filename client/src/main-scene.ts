@@ -33,6 +33,7 @@ function initFields(this: MainScene) {
     caveShapeGenerator: makeCaveShapeGenerator(),
     started: false,
     stopped: false,
+    isForcedDeath: false,
     emitter: this.add.particles("dot").createEmitter({
       speedX: -HORIZONTAL_SPEED,
       scale: { start: 1, end: 0 },
@@ -313,9 +314,11 @@ export class MainScene extends Phaser.Scene {
     if ($.cursors.space.isDown || $.pointer.isDown || globals.isTouching) {
       this.start();
       // It feels kinda sudden to instantly stop accelerating at MAX_CLIMB_SPEED. Does the original game smooth that out?
-      $.player.setVelocityY(
-        Math.max($.player.body.velocity.y - LIFT, -MAX_CLIMB_SPEED)
-      );
+      if (!$.isForcedDeath) {
+        $.player.setVelocityY(
+          Math.max($.player.body.velocity.y - LIFT, -MAX_CLIMB_SPEED)
+        );
+      }
     }
     const offset = 300;
 
@@ -330,16 +333,16 @@ export class MainScene extends Phaser.Scene {
       const score =
         ((new Date().valueOf() - $.startTimeMillis) / 1000) * POINTS_PER_SECOND;
 
-      const scoreText = Math.floor(score).toString();
-      $.scoreText.setText(scoreText);
-      $.scoreShadow.setText(scoreText);
-
       // tab-out detection -- maybe just use tabunload or whatever
-      if ($.score && score - $.score > 3) {
-        $.startTimeMillis -= 1000 * POINTS_PER_SECOND * 111110000000;
-      }
+      if ($.score && score - $.score > 50) {
+        $.isForcedDeath = true;
+      } else if (!$.isForcedDeath) {
+        const scoreText = Math.floor(score).toString();
+        $.scoreText.setText(scoreText);
+        $.scoreShadow.setText(scoreText);
 
-      $.score = score;
+        $.score = score;
+      }
     }
 
     if (removedWall) {
