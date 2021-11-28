@@ -58,11 +58,7 @@ export class MainScene extends Phaser.Scene {
     globals.scene = this;
     globals.camera = this.cameras.cameras[0];
 
-    globals.camera.setZoom(0.5);
-
     // this.add.image(WIDTH * 0.2, HEIGHT * 0.8, "wall"),
-
-    this.add.rectangle(WIDTH / 2, HEIGHT / 2, WIDTH, HEIGHT, 0x800080);
 
     this.fields = initFields.bind(this)();
     const $ = this.fields;
@@ -104,7 +100,6 @@ export class MainScene extends Phaser.Scene {
     if ($.cave.getFirst(true).x < 0) {
       for (let i = 0; i < 2; i++) {
         const child = $.cave.getFirst(true);
-        // $.cave.remove(child);
         $.cave.remove(child, true, true);
       }
       return true;
@@ -144,13 +139,13 @@ export class MainScene extends Phaser.Scene {
     $.cave
       .create(x, ceiling, "tall-wall")
       .setOrigin(1, 1)
-      .setAlpha(segmentIndex % 2 === 0 ? 0.6 : 0.35)
+      // .setAlpha(segmentIndex % 2 === 0 ? 0.6 : 0.35)
       .setVelocityX(-HORIZONTAL_SPEED);
 
     $.cave
       .create(x, floor, "tall-wall")
       .setOrigin(1, 0)
-      .setAlpha(segmentIndex % 2 === 0 ? 0.6 : 0.35)
+      // .setAlpha(segmentIndex % 2 === 0 ? 0.6 : 0.35)
       .setVelocityX(-HORIZONTAL_SPEED);
   }
 
@@ -173,7 +168,6 @@ export class MainScene extends Phaser.Scene {
     player: PT.Physics.Arcade.GameObjectWithBody,
     wall: PT.Physics.Arcade.GameObjectWithBody
   ) {
-    return;
     this.scene.restart();
   }
 }

@@ -15,18 +15,3 @@ export function* take<T>(count: number, iterable: Iterable<T>): Generator<T> {
 export function randomInt(min: number, max: number) {
   return Math.floor(Math.random() * (max - min + 1) + min);
 }
-
-function* makeCycle() {
-  while (true) {
-    yield 0;
-    yield 0;
-    yield 0;
-    yield 1;
-    yield 1;
-    yield 1;
-  }
-}
-const myCycle = makeCycle();
-export function riggedRandomInt(min: number, max: number) {
-  return (myCycle.next() as any).value ? max : min;
-}
