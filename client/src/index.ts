@@ -5,6 +5,7 @@ import { WIDTH, HEIGHT, ORIGINAL_ASSETS } from "./constants";
 
 const config: PT.Core.GameConfig = {
   type: Phaser.AUTO,
+  parent: "game-container",
   width: WIDTH,
   height: HEIGHT,
   backgroundColor: ORIGINAL_ASSETS ? "#000000" : "#000000",

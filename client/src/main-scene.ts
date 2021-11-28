@@ -19,12 +19,13 @@ import { makeCaveShapeGenerator } from "./cave-shape-generator";
 // https://stackoverflow.com/questions/54541049/infer-typescript-type-from-assignment-after-declaration
 function initFields(this: MainScene) {
   return {
-    player: this.physics.add.sprite(WIDTH * 0.2, HEIGHT * 0.7, "player"),
+    player: this.physics.add.sprite(WIDTH * 0.2, HEIGHT * 0.5, "player"),
     cave: this.physics.add.group(),
     cursors: this.input.keyboard.createCursorKeys(),
     pointer: this.game.input.mousePointer,
     caveShapeGenerator: makeCaveShapeGenerator(),
     started: false,
+    stopped: false,
     emitter: this.add.particles("dot").createEmitter({
       speedX: -HORIZONTAL_SPEED,
       scale: { start: 1, end: 0 },
@@ -172,6 +173,18 @@ export class MainScene extends Phaser.Scene {
     player: PT.Physics.Arcade.GameObjectWithBody,
     wall: PT.Physics.Arcade.GameObjectWithBody
   ) {
-    this.scene.restart();
+    const $ = this.fields;
+    if (!$.stopped) {
+      $.stopped = true;
+      this.physics.pause();
+      $.player.setTint(0xff0000);
+      $.emitter.pause();
+      this.time.addEvent({
+        delay: 500,
+        callback: () => {
+          this.scene.restart();
+        },
+      });
+    }
   }
 }
