@@ -41,7 +41,7 @@ function initFields(this: MainScene) {
       .text(0, 0, localStorage.getItem(HIGH_SCORE_KEY) || "", {
         fontSize: "90px",
         color: "black",
-        backgroundColor: "white",
+        backgroundColor: "#5fe566",
       })
       .setDepth(1),
     lastScore: undefined as string | undefined,
