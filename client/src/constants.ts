@@ -31,3 +31,7 @@ export const minDeltaX = {
 
 // export const MAX_DIFFICULTY_DISTANCE = 203; // in blocks
 export const MAX_DIFFICULTY_DISTANCE = 5;
+
+// The cave shouldn't actually touch the top or bottom of the viewport --
+// MARGIN is how close it's allowed to get.
+export const MARGIN = 30; // in pixels
