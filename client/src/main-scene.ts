@@ -7,7 +7,9 @@ import {
   LIFT,
   MAX_CLIMB_SPEED,
   HORIZONTAL_SPEED,
+  WALL_WIDTH,
 } from "./constants";
+import { makeCaveShapeGenerator } from "./cave-shape-generator";
 
 // I wish I could infer type after declaration, but I guess I can't :(
 // https://stackoverflow.com/questions/54541049/infer-typescript-type-from-assignment-after-declaration
@@ -17,6 +19,7 @@ function initFields(this: MainScene) {
     cave: this.physics.add.group(),
     cursors: this.input.keyboard.createCursorKeys(),
     pointer: this.game.input.mousePointer,
+    caveShapeGenerator: makeCaveShapeGenerator(),
   };
 }
 
@@ -70,7 +73,6 @@ export class MainScene extends Phaser.Scene {
 
     if (!HIDE_CAVE) {
       for (let i = 0; i < 50; i++) {
-        const WALL_WIDTH = 120;
         const WAVE_SIZE = 500;
         const x = 0.0 * WIDTH + i * WALL_WIDTH;
         const y = 500 * Math.cos((i * Math.PI * 2) / 40);
@@ -79,6 +81,16 @@ export class MainScene extends Phaser.Scene {
       }
       $.cave.setVelocityX(-HORIZONTAL_SPEED);
       this.physics.add.overlap($.player, $.cave, this.onHit.bind(this));
+    }
+
+    let i = 0;
+    for (let item of $.caveShapeGenerator) {
+      const x = 0.0 * WIDTH + i * WALL_WIDTH;
+      const { equator, ceiling, floor } = item;
+      this.add.image(x, equator, "dot");
+      this.add.image(x, floor, "dot").setTint(0xff0000);
+      this.add.image(x, ceiling, "dot").setTint(0x0000ff);
+      i++;
     }
 
     this.physics.pause();
