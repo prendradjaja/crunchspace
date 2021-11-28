@@ -16,11 +16,11 @@ export function* makeCaveShapeGenerator() {
   while (true) {
     let segmentLength = randomInt(3, 10);
     const caveHeight = caveHeightRange.HARD;
-    const wiggle = HEIGHT - caveHeight - 2 * MARGIN;
+    const wiggleRoom = HEIGHT - caveHeight - 2 * MARGIN;
     for (let i = 0; i < segmentLength; i++) {
       let floor = HEIGHT - MARGIN;
       if (i % 2 === 0) {
-        floor -= wiggle;
+        floor -= wiggleRoom;
       }
       const ceiling = floor - caveHeight;
       yield { ceiling, floor };
