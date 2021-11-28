@@ -1,4 +1,5 @@
-# Ignore everything except TypeScript files
+# Ignore everything except specific file extensions
 *
 !**/
 !*.ts
+!*.js
