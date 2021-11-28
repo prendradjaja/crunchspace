@@ -1,3 +1,7 @@
+# Anywhere
 node_modules/
 .DS_Store
 .idea/
+
+# Root directory
+/.env
