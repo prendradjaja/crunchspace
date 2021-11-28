@@ -65,6 +65,8 @@ export class MainScene extends Phaser.Scene {
     }
     $.cave.setVelocityX(-HORIZONTAL_SPEED);
     this.physics.add.overlap($.player, $.cave, this.onHit.bind(this));
+
+    // this.physics.pause();
   }
 
   update() {
