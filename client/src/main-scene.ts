@@ -140,17 +140,17 @@ export class MainScene extends Phaser.Scene {
     if (item.done) {
       return;
     }
-    const { ceiling, floor } = item.value;
+    const { ceiling, floor, segmentIndex } = item.value;
     $.cave
       .create(x, ceiling, "tall-wall")
       .setOrigin(1, 1)
-      .setAlpha(0.5)
+      .setAlpha(segmentIndex % 2 === 0 ? 0.6 : 0.35)
       .setVelocityX(-HORIZONTAL_SPEED);
 
     $.cave
       .create(x, floor, "tall-wall")
       .setOrigin(1, 0)
-      .setAlpha(0.5)
+      .setAlpha(segmentIndex % 2 === 0 ? 0.6 : 0.35)
       .setVelocityX(-HORIZONTAL_SPEED);
   }
 
