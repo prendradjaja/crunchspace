@@ -84,7 +84,7 @@ function initFields(this: MainScene) {
       .setDepth(1),
     score: 0,
     colors: [
-      { cutoff: 100, color: 0x127475 }, // skobeloff (darkish teal)
+      { cutoff: 1000, color: 0x127475 }, // skobeloff (darkish teal)
       { cutoff: 1250, color: 0x562c2c }, // caput mortuum (reddish brown)
       { cutoff: 1500, color: 0x214e34 }, // british racing green
 
