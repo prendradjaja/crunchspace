@@ -2,7 +2,7 @@ import Phaser, { Types as PT } from "phaser";
 
 import { MainScene } from "./main-scene";
 import { WIDTH, HEIGHT, ORIGINAL_ASSETS } from "./constants";
-import { createHighScore } from "./api";
+import { createHighScore, getHighScores } from "./api";
 import { randomInt } from "./util";
 
 const config: PT.Core.GameConfig = {
@@ -29,6 +29,11 @@ function tryApi() {
   createHighScore({
     player: "example-score",
     score: randomInt(1, 100),
+  });
+  getHighScores().then((scores) => {
+    for (let score of scores) {
+      console.log(score.player, score.score);
+    }
   });
 }
 globals.tryApi = tryApi;

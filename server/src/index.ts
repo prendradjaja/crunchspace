@@ -25,6 +25,22 @@ app.get("/api/hello", (req: express.Request, res: express.Response) => {
   res.send({ message: "hello, world" });
 });
 
+app.get("/api/high-score", async (req, res) => {
+  try {
+    // await fakeNetworkDelay();
+    const { rows: highScores } = await pgPool.query(`
+        SELECT player, score
+        FROM high_score
+        ORDER BY score DESC
+        LIMIT 10
+      `);
+    res.send(highScores);
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Error " + err);
+  }
+});
+
 app.post("/api/high-score", async (req, res) => {
   console.log("Received high score");
   const { player, score } = req.body;
