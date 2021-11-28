@@ -16,6 +16,10 @@ new LinearScale([1, 2], [3, 4]);
 export function* makeCaveShapeGenerator() {
   let elevation: number;
 
+  for (let i = 0; i < 21; i++) {
+    yield { ceiling: 130, floor: 1308, segmentIndex: -1 };
+  }
+
   // Initial elevation
   {
     const { caveHeight } = getDifficultySettings(0);

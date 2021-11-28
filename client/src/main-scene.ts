@@ -228,6 +228,7 @@ export class MainScene extends Phaser.Scene {
     const x = lastWall.x + WALL_WIDTH - GAP_HACK; //
 
     const item = $.caveShapeGenerator.next();
+
     if (item.done) {
       return;
     }
