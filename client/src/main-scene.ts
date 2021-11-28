@@ -13,8 +13,10 @@ import {
   BLOCK_LIMIT,
   POINTS_PER_SECOND,
   HIGH_SCORE_KEY,
+  STAR_SPEED,
+  STAR_LIFESPAN,
 } from "./constants";
-import { take, randomInt } from "./util";
+import { take, randomInt, randomChoice } from "./util";
 import { makeCaveShapeGenerator } from "./cave-shape-generator";
 
 // I wish I could infer type after declaration, but I guess I can't :(
@@ -36,6 +38,40 @@ function initFields(this: MainScene) {
       lifespan: 500,
       frequency: 50,
     }),
+    starEmitters: [
+      this.add.particles("dot").createEmitter({
+        speedX: -STAR_SPEED,
+        scale: 0.2,
+        lifespan: STAR_LIFESPAN,
+        quantity: 0,
+      }),
+      this.add.particles("dot").createEmitter({
+        speedX: -STAR_SPEED,
+        scale: 0.1,
+        alpha: 0.7,
+        lifespan: STAR_LIFESPAN,
+        quantity: 0,
+      }),
+      this.add.particles("dot").createEmitter({
+        speedX: -STAR_SPEED,
+        scale: 0.1,
+        lifespan: STAR_LIFESPAN,
+        quantity: 0,
+      }),
+      this.add.particles("dot").createEmitter({
+        speedX: -STAR_SPEED,
+        scale: 0.05,
+        alpha: 0.5,
+        lifespan: STAR_LIFESPAN,
+        quantity: 0,
+      }),
+      this.add.particles("dot").createEmitter({
+        speedX: -STAR_SPEED,
+        scale: 0.05,
+        lifespan: STAR_LIFESPAN,
+        quantity: 0,
+      }),
+    ],
     startTimeMillis: undefined as number | undefined,
     score: this.add
       .text(0, 0, localStorage.getItem(HIGH_SCORE_KEY) || "", {
@@ -112,6 +148,8 @@ export class MainScene extends Phaser.Scene {
     this.physics.add.overlap($.player, $.walls, this.onHit.bind(this));
 
     this.physics.pause();
+
+    // this.start();
   }
 
   maybeRemoveCaveBlockPair() {
@@ -218,15 +256,20 @@ export class MainScene extends Phaser.Scene {
       .setVelocityX(-HORIZONTAL_SPEED);
   }
 
+  start() {
+    const $ = this.fields;
+    if (!$.started) {
+      $.started = true;
+      $.startTimeMillis = new Date().valueOf();
+      this.physics.resume();
+      $.emitter.startFollow($.player, -120);
+    }
+  }
+
   update() {
     const $ = this.fields;
     if ($.cursors.space.isDown || $.pointer.isDown) {
-      if (!$.started) {
-        $.started = true;
-        $.startTimeMillis = new Date().valueOf();
-        this.physics.resume();
-        $.emitter.startFollow($.player, -120);
-      }
+      this.start();
       // It feels kinda sudden to instantly stop accelerating at MAX_CLIMB_SPEED. Does the original game smooth that out?
       $.player.setVelocityY(
         Math.max($.player.body.velocity.y - LIFT, -MAX_CLIMB_SPEED)
@@ -255,6 +298,11 @@ export class MainScene extends Phaser.Scene {
       $.score.setText(score);
       $.lastScore = score;
     }
+
+    if ($.started && !$.stopped && Math.random() < 0.2) {
+      const emitter = randomChoice($.starEmitters);
+      emitter.emitParticle(1, WIDTH, randomInt(0, HEIGHT));
+    }
   }
 
   onHit(
@@ -267,6 +315,7 @@ export class MainScene extends Phaser.Scene {
       this.physics.pause();
       $.player.setTint(0xff0000);
       $.emitter.pause();
+      $.starEmitters.map((emitter) => emitter.pause());
       localStorage.setItem(HIGH_SCORE_KEY, "Best: " + $.lastScore);
       this.time.addEvent({
         delay: 1000,
