@@ -14,9 +14,10 @@ new LinearScale([1, 2], [3, 4]);
 export function* makeCaveShapeGenerator() {
   let i = 0;
   for (let block of segmented()) {
-    const y = HEIGHT * 0.5 - block.indexInSegment * 100;
+    const equator = HEIGHT * 0.5 - block.indexInSegment * 100;
     yield {
-      equator: y,
+      ceiling: equator - 800,
+      floor: equator + 800,
     };
     i++;
     // if (i > 30) {

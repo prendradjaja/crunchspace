@@ -140,16 +140,14 @@ export class MainScene extends Phaser.Scene {
     if (item.done) {
       return;
     }
-    const { equator } = item.value;
-    const ceilingY = equator - 800;
-    const floorY = equator + 2000;
+    const { ceiling, floor } = item.value;
     $.cave
-      .create(x, ceilingY, "tall-wall")
+      .create(x, ceiling, "tall-wall")
       .setOrigin(1, 0.5)
       .setVelocityX(-HORIZONTAL_SPEED);
 
     $.cave
-      .create(x, floorY, "tall-wall")
+      .create(x, floor, "tall-wall")
       .setOrigin(1, 0.5)
       .setVelocityX(-HORIZONTAL_SPEED);
   }
@@ -173,6 +171,7 @@ export class MainScene extends Phaser.Scene {
     player: PT.Physics.Arcade.GameObjectWithBody,
     wall: PT.Physics.Arcade.GameObjectWithBody
   ) {
+    return;
     this.scene.restart();
   }
 }
