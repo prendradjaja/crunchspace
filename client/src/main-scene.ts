@@ -324,6 +324,12 @@ export class MainScene extends Phaser.Scene {
         ((new Date().valueOf() - $.startTimeMillis) / 1000) * POINTS_PER_SECOND;
 
       $.scoreText.setText(score.toFixed(0).toString());
+
+      // tab-out detection -- maybe just use tabunload or whatever
+      if ($.score && score - $.score > 3) {
+        $.startTimeMillis -= 1000 * POINTS_PER_SECOND * 111110000000;
+      }
+
       $.score = score;
     }
 
