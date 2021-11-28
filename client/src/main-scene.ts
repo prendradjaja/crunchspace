@@ -1,10 +1,14 @@
 import Phaser, { Types as PT } from "phaser";
 
-import { WIDTH, HEIGHT } from "./constants";
+import { WIDTH, HEIGHT, GRAVITY, LIFT, MAX_CLIMB_SPEED } from "./constants";
 
+// I wish I could infer type after declaration, but I guess I can't :(
+// https://stackoverflow.com/questions/54541049/infer-typescript-type-from-assignment-after-declaration
 function initFields(this: MainScene) {
   return {
-    player: this.physics.add.sprite(WIDTH * 0.1, HEIGHT * 0.3, "player"),
+    player: this.physics.add.sprite(WIDTH * 0.6, HEIGHT * 0.5, "player"),
+    cursors: this.input.keyboard.createCursorKeys(),
+    pointer: this.game.input.mousePointer,
   };
 }
 
@@ -26,9 +30,18 @@ export class MainScene extends Phaser.Scene {
 
   create() {
     this.fields = initFields.bind(this)();
-    this.fields.player.body.gravity.y = 500;
-    this.fields.player.setCollideWorldBounds(true);
+    const $ = this.fields;
+    $.player.setCollideWorldBounds(true);
   }
 
-  update() {}
+  update() {
+    const $ = this.fields;
+    if ($.cursors.space.isDown || $.pointer.isDown) {
+      $.player.body.gravity.y = GRAVITY;
+      // It feels kinda sudden to instantly stop accelerating at MAX_CLIMB_SPEED. Does the original game smooth that out?
+      $.player.setVelocityY(
+        Math.max($.player.body.velocity.y - LIFT, -MAX_CLIMB_SPEED)
+      );
+    }
+  }
 }
