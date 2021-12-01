@@ -1,16 +1,16 @@
-const path              = require('path');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
+const path = require("path");
+const HtmlWebpackPlugin = require("html-webpack-plugin");
 
-const publicPath   = path.resolve(__dirname, 'public');
-const srcPath      = path.resolve(__dirname, 'src');
-const buildPath    = path.resolve(__dirname, 'dist');
+const publicPath = path.resolve(__dirname, "public");
+const srcPath = path.resolve(__dirname, "src");
+const buildPath = path.resolve(__dirname, "dist");
 
 module.exports = {
-  entry: path.join(srcPath, 'index.ts'),
+  entry: path.join(srcPath, "index.ts"),
 
   output: {
     path: buildPath,
-    filename: 'bundle.js'
+    filename: "bundle.js",
   },
 
   module: {
@@ -18,26 +18,28 @@ module.exports = {
       {
         test: /\.js$/,
         exclude: /node_modules/,
-        loader: 'babel-loader'
+        loader: "babel-loader",
       },
       {
         test: /\.ts$/,
         exclude: /node_modules/,
-        loader: 'ts-loader'
-      }
-    ]
+        use: [
+          { loader: "ts-loader", options: { onlyCompileBundledFiles: true } },
+        ],
+      },
+    ],
   },
 
   resolve: {
-    extensions: ['*', '.js', '.ts']
+    extensions: ["*", ".js", ".ts"],
   },
 
-  devtool: 'inline-source-map',
+  devtool: "inline-source-map",
 
   plugins: [
     new HtmlWebpackPlugin({
-      template: path.join(publicPath , 'index.html'),
-      filename: 'index.html'
-    })
-  ]
+      template: path.join(publicPath, "index.html"),
+      filename: "index.html",
+    }),
+  ],
 };
