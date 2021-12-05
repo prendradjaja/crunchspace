@@ -27,11 +27,22 @@ npm install
 
 #### Client
 
-TODO
+From the `client` directory:
+```
+npm install
+```
 
 ### Run
 
-TODO
+To run just the client (high scores won't work, but everything else will) --
+
+```
+npm run serve
+```
+
+Then navigate to localhost:8080 in your browser.
+
+To run client + server locally: TODO
 
 ## Deploying to Heroku
 Prerequisites: Heroku CLI
